@@ -1,8 +1,8 @@
-name: Build and deploy
+name: Build and deploy (VPS)
 
+# The site is hosted on GitHub Pages (pages.yml). This VPS workflow only builds
+# on pull requests, and deploys to a VPS only when run manually with secrets set.
 on:
-  push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 
