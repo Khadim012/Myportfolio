@@ -1,0 +1,457 @@
+import type { Project, ProjectGroup } from "./types";
+
+/**
+ * Case-study projects. Order here is the order on the projects index;
+ * `featured` projects appear on the homepage in this order.
+ *
+ * Claims are limited to what the CV/brief and public listings support.
+ * Do not add usage numbers or performance claims without a source.
+ */
+export const projects: Project[] = [
+  {
+    slug: "life-pharmacy",
+    name: "LIFE Pharmacy",
+    client: "LIFE Pharmacy, UAE",
+    sector: "Pharmacy & e-commerce",
+    summary:
+      "The official LIFE Pharmacy app for online shopping, prescription upload and reward vouchers across the UAE.",
+    role: "Senior iOS Developer; owned iOS end to end",
+    platforms: ["iOS"],
+    tech: [
+      "Swift",
+      "SwiftUI",
+      "UIKit",
+      "MVVM",
+      "VIPER",
+      "Claude Code",
+      "Instruments",
+      "Bugsnag",
+      "OneSignal",
+      "NetCore",
+      "Adjust",
+    ],
+    featured: true,
+    links: [
+      { label: "Website", href: "https://www.lifepharmacy.com/", kind: "website" },
+      {
+        label: "App Store",
+        href: "https://apps.apple.com/ae/app/life-pharmacy/id1450835575",
+        kind: "app-store",
+      },
+      {
+        label: "Google Play",
+        href: "https://play.google.com/store/apps/details?id=com.lifepharmacy.application",
+        kind: "google-play",
+        note: "Product link. My role was iOS.",
+      },
+    ],
+    caseStudy: {
+      product: [
+        "LIFE Pharmacy is a UAE pharmacy chain, and its app is the official channel for shopping online. Customers can browse and buy healthcare products, upload a prescription so their nearest branch can deliver it, request products by typing or photographing them, and earn and redeem reward vouchers.",
+      ],
+      responsibilities: [
+        "Owned end-to-end iOS development of the app, built in Swift and SwiftUI on MVVM and VIPER.",
+        "Led the full migration from UIKit to SwiftUI.",
+        "Designed and shipped new customer features while keeping the app fast, stable and responsive through each release.",
+        "Diagnosed and fixed performance bottlenecks and crashes, and improved code structure and build automation.",
+        "Worked with product, design, backend and QA through JIRA and GitHub, consistently meeting release deadlines.",
+      ],
+      built: [
+        {
+          heading: "UIKit-to-SwiftUI migration",
+          body: [
+            "I led the full migration of the app from UIKit to SwiftUI using an AI-native workflow with Claude Code, modernising the codebase and speeding up feature delivery.",
+            "The codebase uses both MVVM and VIPER, so the migration worked within those existing module boundaries.",
+          ],
+        },
+        {
+          heading: "Production troubleshooting",
+          body: [
+            "I diagnosed and fixed performance bottlenecks with Instruments and tracked down crashes reported through Bugsnag.",
+          ],
+        },
+        {
+          heading: "Integrations",
+          bullets: [
+            "OneSignal and NetCore for push notifications.",
+            "Bugsnag for crash reporting.",
+            "Adjust for attribution tracking.",
+          ],
+        },
+        {
+          heading: "Release coordination",
+          body: [
+            "I worked with product, design, backend and QA through JIRA and GitHub, and consistently met release deadlines.",
+          ],
+        },
+      ],
+      outcome: [
+        "The app is published on the App Store as LIFE Pharmacy by LIFE HOME HEALTH CARE (L.L.C), with English and Arabic support.",
+        "The full UIKit-to-SwiftUI migration modernised the codebase and sped up feature delivery.",
+      ],
+    },
+  },
+  {
+    slug: "zushh",
+    name: "ZUSHH",
+    client: "ZUSHH, UAE",
+    sector: "Home & commercial services",
+    summary:
+      "A UAE platform for booking home and commercial services, from deep cleaning and AC work to annual maintenance contracts.",
+    role: "Built and shipped the native iOS app; delivered Android, web and backend",
+    platforms: ["iOS", "Android", "Web", "Backend"],
+    tech: ["Swift", "SwiftUI", "MVVM", "Firebase", "Kotlin", "Next.js", "Node.js", "TypeScript", "AI coding agents"],
+    featured: true,
+    links: [
+      { label: "Website", href: "https://zushh.com/", kind: "website" },
+      {
+        label: "App Store",
+        href: "https://apps.apple.com/ae/app/zushh/id6758752792",
+        kind: "app-store",
+      },
+      {
+        label: "Google Play",
+        href: "https://play.google.com/store/apps/details?id=com.zush.app",
+        kind: "google-play",
+      },
+    ],
+    caseStudy: {
+      product: [
+        "ZUSHH lets customers across the UAE book trusted home and commercial services in one place: cleaning, plumbing, electrical and AC work, remodelling, pest control and recurring maintenance.",
+        "Customers can book something urgent for now, schedule a visit for later, pick up offers and sign up for annual maintenance plans.",
+      ],
+      responsibilities: [
+        "Built and shipped the native iOS app.",
+        "Delivered the full platform scope alongside it: native Android, the website and the backend.",
+        "Used AI coding agents to ship production-ready features with a lean team.",
+      ],
+      built: [
+        {
+          heading: "The booking flow",
+          steps: [
+            {
+              title: "Choose a service",
+              detail: "Browse residential and commercial categories and pick the service you need.",
+            },
+            {
+              title: "Add to cart",
+              detail: "Build up one or more services before checkout, with pricing shown upfront.",
+            },
+            {
+              title: "Pick a saved address",
+              detail: "Reuse a saved address or add a new one for the visit.",
+            },
+            {
+              title: "Book",
+              detail: "Confirm an on-demand booking or choose a slot for a scheduled visit.",
+            },
+            {
+              title: "Track in order history",
+              detail: "Find past and upcoming bookings in order history.",
+            },
+          ],
+        },
+        {
+          heading: "Booking types and plans",
+          bullets: [
+            "On-demand bookings for urgent jobs.",
+            "Scheduled visits for planned work.",
+            "Offers surfaced on eligible services.",
+            "Annual maintenance plans for recurring upkeep.",
+          ],
+        },
+        {
+          heading: "iOS implementation",
+          body: [
+            "I built the iOS app in SwiftUI with an MVVM architecture, using Firebase on iOS.",
+          ],
+        },
+      ],
+      outcome: [
+        "The iOS app is live on the App Store and the Android app is live on Google Play.",
+      ],
+    },
+  },
+  {
+    slug: "nordic-home-healthcare",
+    name: "Nordic Home Healthcare",
+    client: "Nordic Home Healthcare, UAE",
+    sector: "Healthcare",
+    summary:
+      "An at-home healthcare platform in the UAE for nursing, elderly care, physiotherapy, lab tests and IV therapy.",
+    role: "Senior Mobile & Full-Stack Developer; own the platform end to end",
+    platforms: ["iOS", "Android", "Web", "Backend"],
+    tech: ["Kotlin", "Swift", "Next.js", "React", "Node.js", "TypeScript", "REST APIs"],
+    featured: true,
+    links: [
+      { label: "Website", href: "https://nordichc.com/", kind: "website" },
+      {
+        label: "Google Play",
+        href: "https://play.google.com/store/apps/details?id=com.nordichc.ae",
+        kind: "google-play",
+      },
+      // iOS: add an App Store or public TestFlight link here once verified.
+    ],
+    caseStudy: {
+      product: [
+        "Nordic Home Healthcare brings care to patients' homes in the UAE: doctors, nurses, physiotherapists and lab technicians visit, so there are no waiting rooms or travel.",
+        "The platform supports at-home bookings for skilled nursing, elderly care, post-surgery recovery, physiotherapy, home blood tests and IV therapy. In the app, patients book visits with licensed nurses, manage appointments, chat with the care team and follow their care plan.",
+      ],
+      responsibilities: [
+        "Own the complete digital platform end to end: native iOS, native Android, the website and the backend.",
+        "Cover development, integrations, maintenance and ongoing improvements.",
+        "Built and launched the Android app in Kotlin.",
+        "Develop the web front end and the REST APIs the mobile apps consume.",
+      ],
+      built: [
+        {
+          heading: "Android app in Kotlin",
+          body: [
+            "I built the Android app natively in Kotlin and took it through Google Play's closed testing, the production access review and its first public release.",
+          ],
+        },
+        {
+          heading: "Native iOS",
+          body: [
+            "I develop the native iOS app alongside the Android app.",
+          ],
+        },
+        {
+          heading: "Website and REST APIs",
+          body: [
+            "I develop the web front end and backend with Node.js, Next.js, React and TypeScript. The backend exposes REST APIs consumed by the iOS and Android apps.",
+          ],
+        },
+        {
+          heading: "How booking works",
+          steps: [
+            { title: "Choose a service", detail: "Nursing, elderly care, physiotherapy, lab tests or IV therapy." },
+            { title: "Book a home visit", detail: "Request a visit from a licensed clinician at a time that suits." },
+            { title: "Manage appointments", detail: "See, track and manage upcoming visits." },
+            { title: "Stay in touch", detail: "Chat with the care team and follow the care plan." },
+          ],
+        },
+      ],
+      outcome: [
+        "The Android app is publicly available on Google Play, and the website is live at nordichc.com.",
+      ],
+    },
+  },
+  {
+    slug: "ziro",
+    name: "ZIRO Rider & ZIRO Captain",
+    client: "Ziro Ride LLC, through Newsreels",
+    sector: "Ride sharing",
+    summary:
+      "A two-sided ride-sharing platform: a passenger app for booking and tracking rides, and a driver app for the people behind the wheel.",
+    role: "iOS Team Lead",
+    platforms: ["iOS"],
+    tech: ["Swift", "Socket.IO", "Stripe", "Apple Pay", "Maps & routing", "ARKit", "Core Bluetooth"],
+    links: [
+      // Archived listings — add once each URL is confirmed to load.
+      // { label: "ZIRO Rider", href: "https://ziro-rider.appstor.io/", kind: "archive", note: "Archived listing" },
+      // { label: "ZIRO Captain", href: "https://ziro-captain.appstor.io/", kind: "archive", note: "Archived listing" },
+    ],
+    caseStudy: {
+      product: [
+        "ZIRO was a ride-sharing platform built around two native apps: ZIRO Rider for passengers and ZIRO Captain for drivers.",
+        "Both apps depended on the same real-time backbone. A trip only works if the passenger and driver see the same vehicle position, route and status at the same time.",
+      ],
+      responsibilities: [
+        "Led the iOS team delivering three published apps: Newsreels, ZIRO Rider and ZIRO Captain.",
+        "Ran sprint planning, code reviews and release schedules across concurrent app builds.",
+      ],
+      built: [
+        {
+          heading: "Platform: shared real-time features",
+          body: [
+            "These features span both apps and the backend, so I describe them at platform level.",
+          ],
+          bullets: [
+            "Real-time vehicle tracking over Socket.IO.",
+            "Route drawing on the map for each trip.",
+            "Payments with Stripe and Apple Pay.",
+            "Subscription plans, referral programs, community chat and ratings.",
+          ],
+        },
+        {
+          heading: "ZIRO Rider: passenger app",
+          bullets: [
+            "Live search for nearby drivers.",
+            "Trip scheduling for rides booked in advance.",
+            "Route view and live tracking of the assigned vehicle.",
+            "Checkout with Stripe or Apple Pay.",
+          ],
+        },
+        {
+          heading: "Rider safety",
+          body: [
+            "I implemented AR-based driver location, live video streaming, BLE safety tools and voice recognition to make rides safer.",
+          ],
+        },
+        {
+          heading: "ZIRO Captain: driver app",
+          body: [
+            "The driver app is the other half of the same trips. At platform level, it supplies the live vehicle position that riders track over Socket.IO and shows each trip's route to the driver.",
+          ],
+        },
+        {
+          heading: "Team leadership",
+          body: [
+            "I ran sprint planning, code reviews and release schedules across multiple concurrent app builds.",
+          ],
+        },
+      ],
+      outcome: [
+        "Both apps were published on the App Store by Ziro Ride LLC.",
+      ],
+    },
+  },
+  {
+    slug: "cloudgate",
+    name: "CloudGate by Soloinsight",
+    client: "Soloinsight Inc.",
+    sector: "Enterprise security",
+    summary:
+      "A suite of seven enterprise iOS apps for physical access control, visitor management and attendance.",
+    role: "Built and maintained the iOS suite",
+    platforms: ["iOS"],
+    tech: ["Swift", "BLE beacons", "QR codes", "Touch ID", "SQLite", "ID scanning"],
+    links: [
+      { label: "Soloinsight", href: "https://www.soloinsight.com/", kind: "company" },
+      {
+        label: "CloudGate on the App Store",
+        href: "https://apps.apple.com/vc/app/cloudgate-poc/id1211734875",
+        kind: "reference",
+        note: "Platform reference",
+      },
+    ],
+    caseStudy: {
+      product: [
+        "CloudGate is Soloinsight's platform for governing physical access to enterprise facilities. Its mobile apps let staff and visitors manage credentials and help security teams track who is on site.",
+      ],
+      responsibilities: [
+        "Built and maintained a suite of seven enterprise iOS apps on the CloudGate platform.",
+        "Delivered a customised CloudGate edition through Soloinsight, built to Microsoft's specifications.",
+      ],
+      built: [
+        {
+          heading: "Access control",
+          bullets: [
+            "BLE beacon broadcasting and detection.",
+            "Fingerprint authentication with Touch ID.",
+            "QR pass generation and scanning.",
+          ],
+        },
+        {
+          heading: "Visitor management",
+          bullets: [
+            "QR invitations for visitors.",
+            "Driver's licence scanning to capture visitor details at check-in.",
+            "Watchlist alerts that flag visitors to security staff.",
+          ],
+        },
+        {
+          heading: "Attendance and offline use",
+          bullets: [
+            "Attendance tracking.",
+            "Offline storage in SQLite so the apps keep working when the network drops.",
+          ],
+        },
+        {
+          heading: "A customised edition for Microsoft",
+          body: [
+            "I delivered a customised enterprise edition of CloudGate built to Microsoft's specifications.",
+          ],
+        },
+      ],
+      outcome: [
+        "The CloudGate platform remains on the App Store under Soloinsight Inc. The linked listing is a platform reference, not one of the individual apps I built.",
+      ],
+    },
+  },
+];
+
+export const otherProjectGroups: ProjectGroup[] = [
+  {
+    id: "newsreels",
+    title: "Newsreels",
+    intro: "Oct 2018 – Nov 2021 · iOS Team Lead",
+    items: [
+      {
+        name: "Newsreels",
+        description:
+          "A news aggregator that presents stories from many publications as short video reels and concise summaries.",
+        contribution: "Led the iOS team that delivered it as one of three published apps.",
+        links: [
+          {
+            label: "Company page",
+            href: "https://www.linkedin.com/company/newsreels/",
+            kind: "company",
+            note: "Company reference",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "brand-impact",
+    title: "Brand Impact",
+    intro: "Freelance, Jun 2017 – Nov 2020. Five published iOS apps with checkout flows, GPS tracking, localisation and multi-language support.",
+    items: [
+      {
+        name: "GiftyOnlineUAE",
+        description: "E-commerce app for gift shopping in the UAE.",
+        contribution: "Delivered the published iOS app, including checkout.",
+      },
+      {
+        name: "Pets Health",
+        description: "Pet-care retail.",
+        contribution: "Delivered the published iOS app.",
+      },
+      {
+        name: "InfoSense Mobile",
+        description: "GPS fleet tracking.",
+        contribution: "Delivered the published iOS app, including GPS tracking.",
+      },
+      {
+        name: "HomeBiz",
+        description: "Food delivery.",
+        contribution: "Delivered the published iOS app.",
+      },
+      {
+        name: "Quote Catalog",
+        description: "Content curation: a catalogue of quotes.",
+        contribution: "Delivered the published iOS app.",
+      },
+    ],
+  },
+  {
+    id: "buggz",
+    title: "Buggz",
+    intro: "Freelance, Jun 2017 – Nov 2020.",
+    items: [
+      {
+        name: "World Cup 2018 Companion",
+        description: "Live companion app for the 2018 World Cup: real-time scores, goal alerts, fan chat and polls.",
+        contribution: "Built the iOS app.",
+      },
+      {
+        name: "People Finder",
+        description: "A Google Maps people-finder app with offline SQLite caching.",
+        contribution: "Built the iOS app.",
+      },
+      {
+        name: "DoctorWho",
+        description: "A healthcare consultation platform for doctors and pharmacies.",
+        contribution: "Built the iOS app.",
+      },
+    ],
+  },
+];
+
+export const featuredProjects = projects.filter((p) => p.featured);
+
+export function getProject(slug: string): Project | undefined {
+  return projects.find((p) => p.slug === slug);
+}

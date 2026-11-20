@@ -1,0 +1,87 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check # lint + typecheck + static export to ./out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: out
+          retention-days: 7
+
+  deploy:
+    # Only main deploys, and only once the VPS secrets exist.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://khadimhussain.com
+    env:
+      SITE_DIR: /var/www/khadimhussain.com
+      HAS_SECRETS: ${{ secrets.VPS_HOST != '' && secrets.VPS_SSH_KEY != '' }}
+    steps:
+      - name: Skip until VPS secrets are configured
+        if: env.HAS_SECRETS != 'true'
+        run: echo "::notice::Add VPS_HOST, VPS_USER and VPS_SSH_KEY secrets to enable deploys."
+
+      - uses: actions/download-artifact@v4
+        if: env.HAS_SECRETS == 'true'
+        with:
+          name: site
+          path: out
+
+      - name: Configure SSH
+        if: env.HAS_SECRETS == 'true'
+        env:
+          KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+          KNOWN: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          if [ -n "$KNOWN" ]; then printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+          else ssh-keyscan -p "$PORT" -H "$HOST" > ~/.ssh/known_hosts; fi
+          printf 'Host vps\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile ~/.ssh/id_deploy\n  IdentitiesOnly yes\n' \
+            "$HOST" "$PORT" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Upload release and switch
+        if: env.HAS_SECRETS == 'true'
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          REL=$(date -u +%Y%m%d%H%M%S)-${GITHUB_SHA::7}
+          ssh vps "mkdir -p $SITE_DIR/releases/$REL"
+          rsync -az --delete out/ "vps:$SITE_DIR/releases/$REL/"
+          ssh vps "ln -sfn $SITE_DIR/releases/$REL $SITE_DIR/current.tmp && mv -Tf $SITE_DIR/current.tmp $SITE_DIR/current && cd $SITE_DIR/releases && ls -1t | grep -v '^initial$' | tail -n +6 | xargs -r rm -rf --"
+          echo "Deployed $REL"
+
+      - name: Verify live site
+        if: env.HAS_SECRETS == 'true'
+        run: |
+          set -e
+          for p in / /projects/ /projects/life-pharmacy/ /projects/zushh/ /projects/nordic-home-healthcare/ /projects/ziro/ /projects/cloudgate/ /sitemap.xml /robots.txt /khadim-hussain-cv.pdf; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://khadimhussain.com$p")
+            echo "$code $p"; [ "$code" = 200 ]
+          done
+          loc=$(curl -sI https://www.khadimhussain.com/ | tr -d '\r' | awk 'tolower($1)=="location:"{print $2}')
+          echo "www -> $loc"; [ "$loc" = "https://khadimhussain.com/" ]
