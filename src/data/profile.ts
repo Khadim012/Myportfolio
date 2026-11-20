@@ -16,6 +16,13 @@ export const profile = {
     "Khadim Hussain is a Dubai-based Senior iOS Engineer and full-stack developer with 10+ years of native iOS experience, 15+ App Store apps and iOS team leadership.",
 } as const;
 
+export const portrait = {
+  src: "/images/profile/khadim-hussain.webp",
+  width: 512,
+  height: 640,
+  alt: "Portrait of Khadim Hussain",
+} as const;
+
 export const ogImage = {
   url: "/og.png",
   width: 1200,

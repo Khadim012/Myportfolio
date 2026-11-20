@@ -1,4 +1,4 @@
-import { education, profile, siteUrl } from "@/data/profile";
+import { education, portrait, profile, siteUrl } from "@/data/profile";
 
 export function PersonJsonLd() {
   const data = {
@@ -10,7 +10,7 @@ export function PersonJsonLd() {
     jobTitle: profile.headline,
     description: profile.metaDescription,
     email: `mailto:${profile.email}`,
-    image: `${siteUrl}/og.png`,
+    image: `${siteUrl}${portrait.src}`,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Dubai",
