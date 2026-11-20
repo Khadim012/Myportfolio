@@ -1,4 +1,27 @@
-# Deploying khadimhussain.com to your VPS
+# Deploying khadimhussain.com
+
+## Current setup: GitHub Pages (live)
+
+- **Host:** GitHub Pages, deployed by `.github/workflows/pages.yml` on every push to `main`.
+- **Domain:** `khadimhussain.com`, set in repo Settings → Pages with HTTPS enforced. `public/CNAME` holds the domain.
+- **DNS (Hostinger):**
+
+| Type | Name | Content | TTL |
+| --- | --- | --- | --- |
+| A | @ | 185.199.108.153 | 300 |
+| A | @ | 185.199.109.153 | 300 |
+| A | @ | 185.199.110.153 | 300 |
+| A | @ | 185.199.111.153 | 300 |
+| CNAME | www | khadim012.github.io | 300 |
+
+- **Workflow:** work on `development` → open a pull request to `main` → merge → the site updates in about a minute.
+- **Roll back:** revert the commit on `main`, or re-run an older successful *Deploy to GitHub Pages* run.
+
+---
+
+# Alternative: self-hosting on a VPS
+
+Everything below is only needed if you move the site from GitHub Pages to your own server.
 
 The site is a **static export**. `next build` writes plain HTML, CSS, JS and images to `out/`, and Nginx serves that folder. **No Node.js runtime is needed on the server.** No feature in the site needs one.
 

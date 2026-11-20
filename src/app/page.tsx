@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PersonJsonLd } from "@/components/PersonJsonLd";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ButtonLink, SectionHeading } from "@/components/ui";
 import { experience, studioNote } from "@/data/experience";
-import { cv, education, profile } from "@/data/profile";
+import { cv, education, portrait, profile } from "@/data/profile";
 import { featuredProjects, getProject } from "@/data/projects";
 import { skillGroups } from "@/data/skills";
 
@@ -22,6 +23,22 @@ export default function Home() {
       {/* Hero */}
       <section aria-labelledby="hero-title" className="relative overflow-hidden">
         <div className="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pt-24 md:pb-28">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-14">
+          <div className="lg:order-2">
+            <div className="rise relative mx-auto w-40 sm:w-48 lg:w-full">
+              <div aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] bg-accent-soft" />
+              <Image
+                src={portrait.src}
+                width={portrait.width}
+                height={portrait.height}
+                alt={portrait.alt}
+                priority
+                sizes="(min-width: 1024px) 19rem, 12rem"
+                className="relative aspect-[4/5] w-full rounded-[2rem] border border-line bg-white object-cover"
+              />
+            </div>
+          </div>
+          <div className="min-w-0 lg:order-1">
           <div className="rise mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white/60 px-3 py-1 font-medium text-ink">
               <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#2f7d4f]" />
@@ -56,6 +73,8 @@ export default function Home() {
             <ButtonLink href="#contact" variant="ghost">
               Get in touch
             </ButtonLink>
+          </div>
+          </div>
           </div>
 
           <dl className="rise rise-delay-3 mt-16 grid grid-cols-2 border-t border-line sm:grid-cols-4">
