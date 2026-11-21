@@ -7,20 +7,24 @@ export const profile = {
   availability: "Available to start immediately",
   email: "m.khadim012@gmail.com",
   /**
-   * Professional phone number for the "Call me" button. Leave null until Khadim
-   * confirms which number to publish; while null, every call action is hidden.
-   * Example: { display: "+971 50 123 4567", href: "tel:+971501234567" }.
+   * Professional phone number for the "Call me" button, confirmed by Khadim on
+   * 21 Nov 2026. Set to null to hide every call action.
    * The public CV PDF must still never contain a phone number.
    */
-  phone: null as { display: string; href: string } | null,
+  phone: { display: "+971 56 914 7945", href: "tel:+971569147945" } as { display: string; href: string } | null,
+  /** WhatsApp chat link for the same number. Null hides the WhatsApp action. */
+  whatsapp: "https://wa.me/971569147945" as string | null,
+  github: "https://github.com/Khadim012",
   linkedin: "https://www.linkedin.com/in/khadimhussainios/",
   studio: { name: "SwiftAppStudio", href: "https://swiftappstudio.com/" },
   intro:
-    "I build and ship native iOS apps with Swift, SwiftUI and UIKit. I led iOS development and the UIKit-to-SwiftUI migration at Life Pharmacy, and delivered iOS, Android, web and backend work for ZUSHH and Nordic Home Healthcare.",
+    "I'm a Senior iOS Engineer in Dubai, building native apps with Swift, SwiftUI, UIKit and Objective-C. I led iOS development and the UIKit-to-SwiftUI migration at Life Pharmacy, and delivered native iOS, Android, web and backend work for ZUSHH and Nordic Home Healthcare.",
   pitch:
     "10+ years of native iOS and 15+ apps published on the App Store, from leading an iOS team to owning live apps end to end. Today I ship complete platforms: native iOS and Android, web and backend, using AI coding agents to move faster without cutting corners.",
+  /** Homepage <title> and meta description. */
+  seoTitle: "Khadim Hussain | Senior iOS Engineer in Dubai",
   metaDescription:
-    "Khadim Hussain is a Dubai-based Senior iOS Engineer and full-stack developer with 10+ years of native iOS experience, 15+ App Store apps and iOS team leadership.",
+    "Dubai-based Senior iOS Engineer with 10+ years of experience in Swift, SwiftUI, and UIKit. Explore my work on Life Pharmacy, ZUSHH, and Nordic Home Healthcare.",
 } as const;
 
 export const portrait = {
@@ -34,7 +38,7 @@ export const ogImage = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "Khadim Hussain, Senior iOS Engineer & Full-Stack Developer",
+  alt: "Khadim Hussain, Senior iOS Engineer in Dubai, with Life Pharmacy and ZUSHH app screens",
 };
 
 /**

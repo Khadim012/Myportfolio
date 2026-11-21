@@ -24,6 +24,13 @@ const phone = (src: string, height: number, alt: string, caption: string, source
 export const projects: Project[] = [
   {
     slug: "life-pharmacy",
+    seo: {
+      title: "Life Pharmacy iOS & SwiftUI Case Study | Khadim Hussain",
+      description:
+        "How I led iOS development of the LIFE Pharmacy app in Dubai and its full UIKit-to-SwiftUI migration, with push, crash reporting and attribution.",
+      heading: "LIFE Pharmacy iOS app: leading development and the SwiftUI migration",
+      ogImage: "/og/life-pharmacy.png",
+    },
     name: "LIFE Pharmacy",
     client: "LIFE Pharmacy, UAE",
     engagement: "Employer",
@@ -68,33 +75,42 @@ export const projects: Project[] = [
         note: "Product link. My role was iOS.",
       },
     ],
+    video: {
+      src: "/videos/life-pharmacy-ios.mp4",
+      poster: "/images/life-pharmacy/showcase-poster.webp",
+      width: 720,
+      height: 900,
+      caption:
+        "Screen recording of the LIFE Pharmacy iOS app: home offers, categories, prescription upload, cart and checkout. Delivery address blurred.",
+      source: "Khadim's own screen recording of the live app, 21 Nov 2026 (profile and address screens removed)",
+    },
     screenshots: [
       phone(
-        "/images/life-pharmacy/features.webp",
-        1299,
-        "LIFE Pharmacy app artwork listing its services: Book a Doctor, Order Medicines, Upload Prescription, Click & Collect and Life Rental.",
-        "The app brings doctor booking, medicine orders, prescription upload, Click & Collect and equipment rental together.",
-        appStore("id1450835575"),
+        "/images/life-pharmacy/home.webp",
+        1300,
+        "LIFE Pharmacy iOS home screen with product search, quick actions for Rx Upload, Doctor, Pickup and Free Voucher, and Life Friday Sale offers.",
+        "Home: search, quick actions for prescriptions, doctors, pickup and vouchers, then the current offers.",
+        "Khadim's own screenshot of the live app, 21 Nov 2026 (delivery address blurred)",
       ),
       phone(
-        "/images/life-pharmacy/prescription-upload.webp",
-        1299,
-        "LIFE Pharmacy prescription upload screen artwork with a scan frame around a prescription.",
-        "Prescription upload: photograph a prescription and the nearest branch delivers it.",
-        appStore("id1450835575"),
-      ),
-      phone(
-        "/images/life-pharmacy/click-and-collect.webp",
-        1299,
-        "LIFE Pharmacy Click & Collect artwork: order online and collect at a nearby branch.",
-        "Click & Collect: order in the app and pick up at a nearby LIFE branch.",
-        appStore("id1450835575"),
+        "/images/life-pharmacy/click-and-collect-app.webp",
+        1300,
+        "LIFE Pharmacy Click & Collect sheet in the iOS app showing exclusive pickup prices and a Start Pickup button.",
+        "Click & Collect: exclusive pickup prices and a one-tap Start Pickup.",
+        "Khadim's own screenshot of the live app, 21 Nov 2026 (delivery address blurred)",
       ),
       phone(
         "/images/life-pharmacy/medical-rental.webp",
         1299,
         "Life Rental screen in the LIFE Pharmacy app: a manual wheelchair selected with rental from and to dates.",
-        "Life Rental: choose medical equipment and set the rental dates.",
+        "Life Rental: choose medical equipment and set the rental dates (App Store artwork).",
+        appStore("id1450835575"),
+      ),
+      phone(
+        "/images/life-pharmacy/features.webp",
+        1299,
+        "LIFE Pharmacy app artwork listing its services: Book a Doctor, Order Medicines, Upload Prescription, Click & Collect and Life Rental.",
+        "The services in one app: doctors, medicines, prescriptions, Click & Collect and rental (App Store artwork).",
         appStore("id1450835575"),
       ),
     ],
@@ -146,6 +162,13 @@ export const projects: Project[] = [
   },
   {
     slug: "zushh",
+    seo: {
+      title: "ZUSHH Mobile & Web Case Study | Khadim Hussain",
+      description:
+        "I built ZUSHH’s native iOS app and delivered its Android app, website and backend: browse a service, pick an address, book on demand or scheduled.",
+      heading: "ZUSHH: native iOS, Android, web and backend for on-demand home services",
+      ogImage: "/og/zushh.png",
+    },
     name: "ZUSHH",
     client: "ZUSHH, UAE",
     engagement: "Client",
@@ -268,6 +291,13 @@ export const projects: Project[] = [
   },
   {
     slug: "nordic-home-healthcare",
+    seo: {
+      title: "Nordic Home Healthcare Case Study | Khadim Hussain",
+      description:
+        "I own Nordic Home Healthcare’s platform in Dubai: native Android and iOS apps, the Next.js website and the Node.js REST APIs behind it.",
+      heading: "Nordic Home Healthcare: the mobile and web platform I own end to end",
+      ogImage: "/og/nordic-home-healthcare.png",
+    },
     name: "Nordic Home Healthcare",
     client: "Nordic Home Healthcare, UAE",
     engagement: "Employer",
@@ -381,6 +411,13 @@ export const projects: Project[] = [
   },
   {
     slug: "ziro",
+    seo: {
+      title: "ZIRO Ride-Hailing iOS Case Study | Khadim Hussain",
+      description:
+        "I led the iOS team behind ZIRO Rider and ZIRO Captain: live driver search, real-time tracking over Socket.IO, and Stripe and Apple Pay checkout.",
+      heading: "ZIRO Rider & ZIRO Captain: leading the iOS team for two ride-hailing apps",
+      ogImage: "/og/ziro.png",
+    },
     name: "ZIRO Rider & ZIRO Captain",
     client: "Ziro Ride LLC, through Newsreels",
     engagement: "Client",
@@ -388,6 +425,8 @@ export const projects: Project[] = [
     summary:
       "A two-sided ride-sharing platform: a passenger app for booking and tracking rides, and a driver app for the people behind the wheel.",
     role: "iOS Team Lead",
+    contribution:
+      "I led the iOS team that shipped ZIRO Rider and ZIRO Captain, and built rider features such as live driver search, trip scheduling, real-time tracking and Stripe and Apple Pay checkout.",
     platforms: ["iOS"],
     tech: ["Swift", "Socket.IO", "Stripe", "Apple Pay", "Maps & routing", "ARKit", "Core Bluetooth"],
     links: [
@@ -452,6 +491,13 @@ export const projects: Project[] = [
   },
   {
     slug: "cloudgate",
+    seo: {
+      title: "CloudGate Enterprise iOS Case Study | Khadim Hussain",
+      description:
+        "I built and maintained CloudGate by Soloinsight: seven enterprise iOS apps for access control, visitor management and attendance.",
+      heading: "CloudGate by Soloinsight: a suite of seven enterprise iOS apps",
+      ogImage: "/og/cloudgate.png",
+    },
     name: "CloudGate by Soloinsight",
     client: "Soloinsight Inc.",
     engagement: "Employer",
@@ -459,6 +505,8 @@ export const projects: Project[] = [
     summary:
       "A suite of seven enterprise iOS apps for physical access control, visitor management and attendance.",
     role: "Built and maintained the iOS suite",
+    contribution:
+      "I built and maintained the CloudGate iOS suite: BLE beacon detection, QR passes, fingerprint authentication and offline SQLite storage, plus a customised enterprise edition.",
     logo: logos.soloinsight,
     platforms: ["iOS"],
     tech: ["Swift", "BLE beacons", "QR codes", "Touch ID", "SQLite", "ID scanning"],

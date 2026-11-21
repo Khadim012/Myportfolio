@@ -10,7 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run build",
     "preview": "node scripts/preview.mjs out",
-    "images": "node scripts/make-images.mjs",
+    "images": "node scripts/make-variants.mjs && node scripts/make-images.mjs",
     "test:browser": "node scripts/browser-test.mjs"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.6",
     "playwright-core": "^1.65.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
   }

@@ -81,18 +81,28 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
       >
         {current ? (
           <figure className="flex max-h-[94dvh] flex-col items-center gap-3">
-            <div className="flex w-full items-center justify-between gap-3">
-              <p className="text-sm text-paper/80" aria-live="polite">
+            <div className="flex w-full shrink-0 items-center justify-between gap-3">
+              <p className="shrink-0 text-sm text-paper/80" aria-live="polite">
                 {(index ?? 0) + 1} of {shots.length}
               </p>
               <div className="flex gap-2">
                 {shots.length > 1 ? (
                   <>
-                    <button type="button" onClick={() => step(-1)} className="min-h-11 rounded-full border border-paper/40 px-4 text-sm hover:border-paper">
-                      <span aria-hidden="true">←</span> Previous
+                    <button
+                      type="button"
+                      onClick={() => step(-1)}
+                      className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-paper/40 px-3 text-sm hover:border-paper sm:px-4"
+                    >
+                      <span aria-hidden="true">←</span>
+                      <span className="max-sm:sr-only">Previous</span>
                     </button>
-                    <button type="button" onClick={() => step(1)} className="min-h-11 rounded-full border border-paper/40 px-4 text-sm hover:border-paper">
-                      Next <span aria-hidden="true">→</span>
+                    <button
+                      type="button"
+                      onClick={() => step(1)}
+                      className="inline-flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full border border-paper/40 px-3 text-sm hover:border-paper sm:px-4"
+                    >
+                      <span className="max-sm:sr-only">Next</span>
+                      <span aria-hidden="true">→</span>
                     </button>
                   </>
                 ) : null}
@@ -106,10 +116,20 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
               alt={current.alt}
               width={current.width}
               height={current.height}
-              sizes="94vw"
-              className={`h-auto max-h-[78dvh] w-auto max-w-full rounded-2xl bg-white ${current.kind === "desktop" ? "" : "shadow-2xl"}`}
+              sizes={current.kind === "desktop" ? "94vw" : "(min-width: 640px) 26rem, 80vw"}
+              // Fit the screen: as tall as the space left under the controls and caption
+              // allows, never wider than the viewport, keeping the screenshot's ratio.
+              style={
+                current.kind === "desktop"
+                  ? { width: "100%", height: "auto", maxHeight: "calc(94dvh - 8rem)", objectFit: "contain" }
+                  : {
+                      height: `min(calc(94dvh - 8rem), calc(94vw * ${(current.height / current.width).toFixed(3)}))`,
+                      width: "auto",
+                    }
+              }
+              className={`shrink-0 rounded-2xl bg-white ${current.kind === "desktop" ? "" : "shadow-2xl"}`}
             />
-            <figcaption className="max-w-2xl text-center text-sm text-paper/85">{current.caption}</figcaption>
+            <figcaption className="max-w-2xl shrink-0 text-center text-sm leading-snug text-paper/85">{current.caption}</figcaption>
           </figure>
         ) : null}
       </dialog>

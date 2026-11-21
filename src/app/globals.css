@@ -129,6 +129,11 @@
   .rise {
     animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
+  /* Hero text: visible from the first paint (no opacity fade), so it never delays
+     Largest Contentful Paint; it only settles 10px into place. */
+  .rise-text {
+    animation: rise-text 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
   .rise-delay-1 {
     animation-delay: 80ms;
   }
@@ -161,6 +166,7 @@
 
 @media print {
   .rise,
+  .rise-text,
   .reveal {
     animation: none !important;
   }
@@ -179,6 +185,15 @@
   }
   to {
     opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise-text {
+  from {
+    transform: translateY(10px);
+  }
+  to {
     transform: none;
   }
 }

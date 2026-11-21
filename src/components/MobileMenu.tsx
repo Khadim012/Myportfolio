@@ -35,9 +35,9 @@ export function MobileMenu({ items, email }: Props) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-10 items-center gap-2 rounded-full border border-line px-4 text-sm font-medium"
+        className="inline-flex h-10 min-w-10 items-center justify-center gap-2 rounded-full border border-line px-3 text-sm font-medium min-[360px]:px-4"
       >
-        <span>{open ? "Close" : "Menu"}</span>
+        <span className="max-[359px]:sr-only">{open ? "Close" : "Menu"}</span>
         <span aria-hidden="true" className="relative block h-2.5 w-4">
           <span
             className={`absolute left-0 top-0 h-px w-4 bg-current transition-transform ${open ? "translate-y-[5px] rotate-45" : ""}`}
