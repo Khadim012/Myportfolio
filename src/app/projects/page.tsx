@@ -5,10 +5,10 @@ import { OutboundLink, SectionHeading } from "@/components/ui";
 import { otherProjectGroups, projects } from "@/data/projects";
 
 const description =
-  "Case studies from Khadim Hussain, an iOS developer in Dubai: native iOS and Android apps, websites and backends for pharmacy, healthcare and home services.";
+  "Case studies by Khadim Hussain, Senior iOS Engineer in Dubai: native iOS and Android apps, websites and backends for pharmacy, healthcare and home services.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "iOS, Android & Web Projects | Khadim Hussain",
+  title: "iOS, Android & Web Case Studies | Khadim Hussain",
   description,
   path: "/projects/",
   image: { url: "/og/projects.png", alt: "Projects by Khadim Hussain: Life Pharmacy, ZUSHH and Nordic Home Healthcare app screens" },
@@ -23,8 +23,8 @@ export default function ProjectsPage() {
           iOS, Android and web projects I&apos;ve shipped.
         </h1>
         <p className="rise rise-delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Five in-depth case studies from my work as an iOS developer in Dubai, followed by earlier iOS work for clients
-          and agencies. Each one covers what the product does, my part in it, what I built, and the outcome.
+          Five case studies from my work as an iOS engineer in Dubai, followed by earlier iOS apps I built for clients
+          and agencies. Each case study explains what the product does, what I did, how I built it and what shipped.
         </p>
       </section>
 

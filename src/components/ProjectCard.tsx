@@ -5,7 +5,16 @@ import { BrandMark, Shot } from "./media";
 const storeKinds = new Set(["website", "app-store", "google-play"]);
 
 /** Website, App Store and Google Play links, as compact pills that open in a new tab. */
-export function ProductLinks({ links, className = "" }: { links: ExternalLink[]; className?: string }) {
+export function ProductLinks({
+  links,
+  className = "",
+  surface = "card",
+}: {
+  links: ExternalLink[];
+  className?: string;
+  /** "card" sits on a white card; "page" sits on the grey page and needs a white pill. */
+  surface?: "card" | "page";
+}) {
   const items = links.filter((l) => storeKinds.has(l.kind));
   if (!items.length) return null;
   return (
@@ -16,7 +25,11 @@ export function ProductLinks({ links, className = "" }: { links: ExternalLink[];
             href={l.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-paper px-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper-deep"
+            className={`inline-flex min-h-11 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium text-ink transition-colors ${
+              surface === "page"
+                ? "bg-surface shadow-[0_0_0_1px_rgb(29_29_31/0.1)] hover:shadow-[0_0_0_1px_rgb(29_29_31/0.25)]"
+                : "bg-paper hover:bg-paper-deep"
+            }`}
           >
             {l.label}
             {l.kind === "google-play" && l.note ? <span className="font-normal text-muted">· product link</span> : null}
@@ -154,7 +167,7 @@ export function ProjectCard({ project, headingLevel = "h3" }: { project: Project
 export function FeaturedProject({ project }: { project: Project }) {
   return (
     <article className="card reveal overflow-hidden">
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
         <CardText project={project} lead />
         <div className="order-first lg:order-none">
           <BrandPanel project={project} lead />

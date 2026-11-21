@@ -47,6 +47,11 @@ export function PersonJsonLd() {
       "React",
       "Next.js",
       "Node.js",
+      "TypeScript",
+      "REST APIs",
+      "AI-assisted software development",
+      "Meta Ads",
+      "Search engine optimization",
     ],
     // Verified profiles only: LinkedIn, and the GitHub account that hosts this site.
     sameAs: [profile.linkedin, profile.github],

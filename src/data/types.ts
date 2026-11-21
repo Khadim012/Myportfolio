@@ -75,6 +75,8 @@ export interface Project {
     description: string;
     /** Case-study H1: what the product is and what I did. */
     heading: string;
+    /** Describes what the social preview image shows. */
+    ogAlt: string;
     /** 1200x630 social preview built from real screenshots and logos. */
     ogImage: string;
   };
@@ -120,8 +122,8 @@ export interface ProjectGroup {
 
 export interface ExperienceItem {
   organisation: string;
-  /** Employment or freelance/contract work. Client projects are listed separately. */
-  kind: "Employer" | "Freelance";
+  /** Employment, freelance/contract work, my own studio, or a client engagement. Client projects are listed separately. */
+  kind: "Employer" | "Freelance" | "Founder" | "Client";
   logo?: Logo;
   /** Client products delivered while in this role, labelled as client work. */
   clientProjects?: { name: string; slug?: string; logo?: Logo }[];
@@ -132,6 +134,8 @@ export interface ExperienceItem {
   summary: string;
   highlights: string[];
   projectSlugs?: string[];
+  /** External site for the organisation, shown as a link on the card. */
+  website?: { label: string; href: string };
 }
 
 export interface SkillGroup {

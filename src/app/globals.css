@@ -77,6 +77,8 @@
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    /* With enlarged text, a long word (e.g. "Healthcare") breaks instead of widening the page. */
+    overflow-wrap: anywhere;
   }
 
   /* Anchor offsets: land each section heading about 6rem from the top, clear of the

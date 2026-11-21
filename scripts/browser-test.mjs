@@ -33,18 +33,21 @@ const pages = [
 // Exact titles and social images per indexable page (SEO brief, Nov 2026).
 const EXPECTED = {
   "/": { title: "Khadim Hussain | Senior iOS Engineer in Dubai", og: "/og.png" },
-  "/projects/": { title: "iOS, Android & Web Projects | Khadim Hussain", og: "/og/projects.png" },
-  "/projects/life-pharmacy/": { title: "Life Pharmacy iOS & SwiftUI Case Study | Khadim Hussain", og: "/og/life-pharmacy.png" },
-  "/projects/zushh/": { title: "ZUSHH Mobile & Web Case Study | Khadim Hussain", og: "/og/zushh.png" },
-  "/projects/nordic-home-healthcare/": { title: "Nordic Home Healthcare Case Study | Khadim Hussain", og: "/og/nordic-home-healthcare.png" },
+  "/projects/": { title: "iOS, Android & Web Case Studies | Khadim Hussain", og: "/og/projects.png" },
+  "/projects/life-pharmacy/": { title: "Life Pharmacy iOS App & SwiftUI Migration | Khadim Hussain", og: "/og/life-pharmacy.png" },
+  "/projects/zushh/": { title: "ZUSHH iOS App, Android & Web Case Study | Khadim Hussain", og: "/og/zushh.png" },
+  "/projects/nordic-home-healthcare/": { title: "Nordic Home Healthcare iOS, Android & Web | Khadim Hussain", og: "/og/nordic-home-healthcare.png" },
   "/projects/ziro/": { title: "ZIRO Ride-Hailing iOS Case Study | Khadim Hussain", og: "/og/ziro.png" },
   "/projects/cloudgate/": { title: "CloudGate Enterprise iOS Case Study | Khadim Hussain", og: "/og/cloudgate.png" },
 };
 
 const viewports = {
   mobile: { width: 375, height: 812 },
+  phone320: { width: 320, height: 568 },
   phone390: { width: 390, height: 844 },
+  phone430: { width: 430, height: 932 },
   tablet: { width: 768, height: 1024 },
+  laptop: { width: 1024, height: 768 },
   desktop: { width: 1440, height: 900 },
 };
 
@@ -427,8 +430,14 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     });
     const label = `[${vpName}] first screen`;
     check(`${label} h1 is the name`, info.name === "Khadim Hussain", info.name);
-    check(`${label} Download CV visible without scrolling`, info.cvInView);
-    check(`${label} email visible without scrolling and shows the address`, info.mailInView && info.mailShowsAddress);
+    // Below 360px the actions stack in one column, so on a 320 × 568 screen they continue below the fold.
+    // There they must stay readable (full-width, no overflow), which the overflow checks above cover.
+    if (vp.width >= 360) {
+      check(`${label} Download CV visible without scrolling`, info.cvInView);
+      check(`${label} email visible without scrolling and shows the address`, info.mailInView && info.mailShowsAddress);
+    } else {
+      check(`${label} email action shows the address`, info.mailShowsAddress);
+    }
     if (vp.width >= 1024) {
       check(`${label} Download CV in the header`, info.headerCv === 1, String(info.headerCv));
     } else {
@@ -448,6 +457,14 @@ for (const [vpName, vp] of Object.entries(viewports)) {
       check(`${label} all four contact actions visible without scrolling`, all4.length === 4 && all4.every(Boolean), JSON.stringify(all4));
     }
     check(`${label} contact tap targets at least 44px`, info.tap);
+    // Each action's accessible name reads as one phrase, with the address intact.
+    const heroLinks = page.locator('section[aria-labelledby="hero-title"]');
+    const named = await Promise.all(
+      [/^Download CV PDF$/, /^Email me m\.khadim012@gmail\.com$/, /^Call me \+971 56 914 7945$/, /^WhatsApp \+971 56 914 7945 \(opens in a new tab\)$/].map(
+        (name) => heroLinks.getByRole("link", { name }).count(),
+      ),
+    );
+    check(`${label} contact actions have clear accessible names`, named.every((n) => n === 1), JSON.stringify(named));
     check(`${label} contact actions come before product visuals`, info.before);
     check(
       `${label} call link only when a real number is configured`,
@@ -556,7 +573,7 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     const hero = page.locator('section[aria-labelledby="hero-title"]');
     const call = hero.getByRole("link", { name: /Call me/ });
     const wa = hero.getByRole("link", { name: /WhatsApp/ });
-    check(`[${vpName}] call link dials the full international number`, (await call.getAttribute("href")) === "tel:+971569147945" && (await call.textContent()).includes("+971 56 914 7945"));
+    check(`[${vpName}] call link dials the full international number`, (await call.getAttribute("href")) === "tel:+971569147945" && (await call.textContent()).replace(/ /g, " ").includes("+971 56 914 7945"));
     check(`[${vpName}] WhatsApp opens a chat with the same number`, (await wa.getAttribute("href")) === "https://wa.me/971569147945" && (await wa.getAttribute("target")) === "_blank");
     for (const l of [call, wa, hero.getByRole("link", { name: /Email me/ }), hero.getByRole("link", { name: /Download CV/ })]) {
       const box = await l.boundingBox();

@@ -95,9 +95,10 @@ export function SiteHeader() {
       <div className="glass relative mx-auto flex h-14 max-w-[75rem] items-center justify-between gap-3 rounded-full pl-4 pr-2 sm:pl-5">
         <Link
           href="/"
-          className="flex min-h-11 items-center whitespace-nowrap text-[0.9375rem] font-semibold tracking-tight text-ink sm:text-base"
+          className="flex min-h-11 min-w-0 items-center text-[0.9375rem] font-semibold tracking-tight text-ink sm:text-base"
         >
-          {profile.name}
+          {/* Truncates rather than pushing the Menu button off screen when text is enlarged. */}
+          <span className="truncate">{profile.name}</span>
         </Link>
 
         <nav aria-label="Main" className="absolute left-1/2 hidden -translate-x-1/2 lg:block">
@@ -116,7 +117,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {cv.available ? (
             <a
               href={cv.path}

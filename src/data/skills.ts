@@ -1,6 +1,6 @@
 import type { SkillGroup } from "./types";
 
-/** Four groups, native iOS first. Short lists so each group scans in a glance. */
+/** Engineering groups first (native iOS leads), then marketing. Short lists so each group scans in a glance. */
 export const skillGroups: SkillGroup[] = [
   {
     title: "Native iOS",
@@ -17,12 +17,12 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    title: "Android",
-    skills: ["Kotlin", "Native Android apps", "Google Play release & review", "Closed testing & production access"],
+    title: "Native Android",
+    skills: ["Kotlin", "Android app development", "Google Play release & review", "Closed testing & production access"],
   },
   {
     title: "Web & Backend",
-    skills: ["Next.js", "React", "Node.js", "TypeScript", "REST API design", "Socket.IO real-time"],
+    skills: ["React", "Next.js", "Node.js", "TypeScript", "REST APIs", "Socket.IO real-time"],
   },
   {
     title: "Architecture & Tooling",
@@ -33,8 +33,15 @@ export const skillGroups: SkillGroup[] = [
       "Instruments profiling",
       "Bugsnag & Crashlytics",
       "TestFlight & Fastlane",
-      "Claude Code & AI-assisted workflows",
       "Git, GitHub & JIRA",
     ],
+  },
+  {
+    title: "AI-Assisted Development",
+    skills: ["Claude Code", "AI coding agents", "AI-assisted code review & testing"],
+  },
+  {
+    title: "Digital Marketing & SEO",
+    skills: ["Meta Ads campaign setup & management", "Campaign-related website & app updates", "AI-assisted SEO"],
   },
 ];

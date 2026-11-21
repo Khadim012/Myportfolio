@@ -46,7 +46,8 @@ Live at https://khadimhussain.com.
 - Screen recordings: blur or cut anything personal (addresses, profile screens, names, emails) before publishing.
 - Homepage order: Hero and contact actions → Companies & Projects → Projects (Life Pharmacy lead, ZUSHH, Nordic) → AI-Assisted Development → Experience → Skills and Education → Contact. Section ids: `projects`, `ai-development`, `experience`, `skills`, `contact`.
 - Navigation (`src/components/SiteHeader.tsx`): floating glass bar; links Projects, Experience, Skills, Contact as `/#id` so they work from case studies; active-section pill; mobile Menu panel closes on selection, outside tap or Escape (focus returns to the button).
-- Contact actions (`src/components/ContactActions.tsx`) read only from `profile.ts`, used by the hero and Contact section: 2 × 2 on phones, one row from 1280px in the hero.
+- Contact actions (`src/components/ContactActions.tsx`) read only from `profile.ts`, used by the hero and Contact section: 2 × 2 on phones (one column on 320px screens or with enlarged text), one row from 1280px in the hero. Each action's `aria-label` is its visible label and value joined by one space (e.g. "Email me name@domain"), so the address reads as one unit and matches the visible text.
+- Experience entries have ids (`experienceId()` in `src/data/experience.ts`); each case study links to its matching role.
 - The AI-Assisted Development image is an illustration with generic code (`npm run images` renders it). Replace it only with an approved real screenshot free of private code, credentials and customer data.
 
 ## SEO

@@ -5,7 +5,7 @@ import { ContactActions } from "@/components/ContactActions";
 import { PersonJsonLd } from "@/components/PersonJsonLd";
 import { FeaturedProject, ProjectCard } from "@/components/ProjectCard";
 import { BrandMark, Shot } from "@/components/media";
-import { experience, studioNote } from "@/data/experience";
+import { experience, experienceId } from "@/data/experience";
 import { companies } from "@/data/logos";
 import { education, portrait, profile } from "@/data/profile";
 import { getProject } from "@/data/projects";
@@ -24,6 +24,13 @@ const zushh = getProject("zushh")!;
 const nordic = getProject("nordic-home-healthcare")!;
 // Hero device frames: the real Life Pharmacy home screen and a ZUSHH booking screen.
 const heroShots = [life.screenshots![0], zushh.screenshots!.find((s) => s.src.includes("booking")) ?? zushh.screenshots![0]];
+
+const kindLabel = {
+  Employer: "Employment",
+  Founder: "Own studio",
+  Client: "Client project",
+  Freelance: "Freelance",
+} as const;
 
 function SectionHeading({ id, title, subtitle }: { id: string; title: string; subtitle?: string }) {
   return (
@@ -61,7 +68,7 @@ export default function Home() {
                   <span aria-hidden="true" className="mx-1.5 hidden text-muted sm:inline">
                     ·
                   </span>
-                  <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1.5">
                     <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#1f8a4c]" />
                     {profile.availability}
                   </span>
@@ -172,16 +179,16 @@ export default function Home() {
       {/* AI-Assisted Development */}
       <section aria-labelledby="ai-title" id="ai-development" className="pb-[clamp(3rem,1.9rem+4.4vw,7rem)]">
         <div className="container-x">
-          <div className="reveal grid items-center gap-8 overflow-hidden rounded-[1.75rem] bg-accent-soft p-6 sm:p-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-12 lg:p-11">
+          <div className="reveal grid grid-cols-1 items-center gap-8 overflow-hidden rounded-[1.75rem] bg-accent-soft p-6 sm:p-9 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-12 lg:p-11">
             <div>
               <h2 id="ai-title" className="t-section">
                 AI-Assisted Development
               </h2>
               <p className="t-body mt-4 text-ink/85">
-                I use Claude Code and other AI coding assistants to explore implementation options, accelerate
-                development, and review changes. I used Claude Code to support the UIKit-to-SwiftUI migration at Life
-                Pharmacy and applied AI-assisted workflows while delivering mobile and web features for ZUSHH and Nordic
-                Home Healthcare.
+                I use Claude Code and other AI agents to implement features, review code and support SEO work. At Life
+                Pharmacy, Claude Code supported the migration from UIKit to SwiftUI. For ZUSHH and Nordic Home
+                Healthcare, I use AI-assisted workflows to build mobile and web features, and at Nordic I also use AI
+                agents to assist with SEO.
               </p>
               <figure className="mt-6 border-l-[3px] border-accent pl-4">
                 <blockquote className="t-title font-semibold text-ink">
@@ -218,11 +225,15 @@ export default function Home() {
       {/* Experience */}
       <section aria-labelledby="experience-title" id="experience" className="section-y bg-surface">
         <div className="container-x">
-          <SectionHeading id="experience-title" title="Experience" subtitle={studioNote} />
-          <ol className="grid gap-5">
+          <SectionHeading id="experience-title" title="Experience" />
+          <ol className="grid grid-cols-1 gap-5">
             {experience.map((job) => (
-              <li key={job.organisation} className="reveal rounded-[1.75rem] bg-paper p-6 sm:p-8">
-                <div className="grid gap-5 md:grid-cols-[minmax(0,18rem)_1fr] md:gap-10">
+              <li
+                key={job.organisation}
+                id={experienceId(job.organisation)}
+                className="scroll-target reveal rounded-[1.75rem] bg-paper p-6 sm:p-8"
+              >
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-[minmax(0,min(18rem,45%))_minmax(0,1fr)] md:gap-10">
                   <div className="flex items-start gap-3.5">
                     <BrandMark name={job.organisation} logo={job.logo} size="lg" />
                     <div className="min-w-0">
@@ -235,7 +246,7 @@ export default function Home() {
                             job.kind === "Employer" ? "bg-accent-soft text-accent" : "bg-paper-deep text-ink"
                           }`}
                         >
-                          {job.kind === "Employer" ? "Employment" : "Freelance"}
+                          {kindLabel[job.kind]}
                         </span>
                       </p>
                     </div>
@@ -253,9 +264,9 @@ export default function Home() {
                     {job.clientProjects?.length ? (
                       <ul className="mt-4 flex flex-wrap gap-2" aria-label="Client projects">
                         {job.clientProjects.map((c) => (
-                          <li key={c.name} className="inline-flex items-center gap-2 rounded-full bg-surface py-1 pl-1 pr-3 text-sm">
+                          <li key={c.name} className="inline-flex max-w-full items-center gap-2 rounded-full bg-surface py-1 pl-1 pr-3 text-sm">
                             <BrandMark name={c.name} logo={c.logo} size="sm" />
-                            <span>
+                            <span className="min-w-0">
                               <span className="text-muted">Client project: </span>
                               <span className="font-semibold">{c.name}</span>
                             </span>
@@ -282,6 +293,20 @@ export default function Home() {
                         })}
                       </p>
                     ) : null}
+                    {job.website ? (
+                      <p className="mt-3">
+                        <a
+                          href={job.website.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group inline-flex min-h-11 items-center gap-1.5 font-semibold text-accent"
+                        >
+                          <span className="link-underline">{job.website.label}</span>
+                          <span className="sr-only"> (opens in a new tab)</span>
+                          <span aria-hidden="true">↗</span>
+                        </a>
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </li>
@@ -293,7 +318,7 @@ export default function Home() {
       {/* Skills and Education */}
       <section aria-labelledby="skills-title" id="skills" className="section-y">
         <div className="container-x">
-          <SectionHeading id="skills-title" title="Skills" subtitle="Native iOS first, with Android, web and backend when the product needs them." />
+          <SectionHeading id="skills-title" title="Skills" subtitle="Native iOS comes first. I add Android, web and backend work, plus campaigns and SEO, when a product needs them." />
           <div className="grid gap-5 sm:grid-cols-2">
             {skillGroups.map((group) => (
               <div key={group.title} className="card reveal p-6 sm:p-8">
@@ -325,14 +350,18 @@ export default function Home() {
       {/* Contact */}
       <section aria-labelledby="contact-title" id="contact" className="pb-[clamp(3rem,1.9rem+4.4vw,7rem)]">
         <div className="container-x">
-          <div className="card p-6 sm:p-10 lg:p-14">
+          <div className="card p-5 sm:p-10 lg:p-14">
             <h2 id="contact-title" className="t-section max-w-3xl">
               Hiring for iOS, or need an app shipped? Let&apos;s talk.
             </h2>
-            <p className="t-body mt-4 text-muted">
+            <p className="t-body mt-4 max-w-3xl text-ink/85">
+              I build native iOS and Android apps, as well as the websites and backends that support them. I use AI
+              coding assistants to speed up development, and I review and test the changes before they ship.
+            </p>
+            <ContactActions surface="card" className="mt-6 sm:mt-8" />
+            <p className="mt-5 text-[0.9375rem] text-muted">
               {profile.availability}. Based in {profile.location}.
             </p>
-            <ContactActions surface="card" className="mt-8" />
             <p className="mt-6 flex flex-wrap gap-x-6 gap-y-1 text-[1.0625rem]">
               <a
                 href={profile.linkedin}

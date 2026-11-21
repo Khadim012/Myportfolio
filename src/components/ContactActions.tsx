@@ -3,7 +3,8 @@ import { cv, profile } from "@/data/profile";
 /**
  * Download CV, Call me, Email me and WhatsApp, from the single source in
  * src/data/profile.ts (used by the hero and the Contact section).
- * Phones: a 2 × 2 grid (one column below 360px). Wider: one row where space allows.
+ * Phones: a 2 × 2 grid that drops to one column when two 9rem buttons no longer fit
+ * (320px screens, or enlarged text). Wider: one row where space allows.
  * Call and WhatsApp render only while profile.phone / profile.whatsapp are set.
  */
 
@@ -16,7 +17,11 @@ type Action = {
   primary?: boolean;
   download?: boolean;
   external?: boolean;
-  srExtra?: string;
+  /**
+   * Accessible name: the visible label and value with one space between them, so the
+   * address reads as one unit and the name still matches the visible text (WCAG 2.5.3).
+   */
+  ariaLabel: string;
 };
 
 const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" } as const;
@@ -50,13 +55,43 @@ const icons = {
   ),
 };
 
+/** Keeps "+971 56" and "914 7945" together, leaving one break opportunity between them. */
+function phoneGroups(value: string) {
+  const parts = value.split(" ");
+  if (parts.length !== 4) return value;
+  return `${parts[0]} ${parts[1]} ${parts[2]} ${parts[3]}`;
+}
+
 export function contactActions(): Action[] {
   const list: Action[] = [];
   if (cv.available)
-    list.push({ key: "cv", label: cv.label, value: "PDF", href: cv.path, icon: icons.cv, primary: true, download: true });
+    list.push({
+      key: "cv",
+      label: cv.label,
+      value: "PDF",
+      href: cv.path,
+      icon: icons.cv,
+      primary: true,
+      download: true,
+      ariaLabel: `${cv.label} PDF`,
+    });
   if (profile.phone)
-    list.push({ key: "call", label: "Call me", value: profile.phone.display, href: profile.phone.href, icon: icons.call });
-  list.push({ key: "email", label: "Email me", value: profile.email, href: `mailto:${profile.email}`, icon: icons.email });
+    list.push({
+      key: "call",
+      label: "Call me",
+      value: profile.phone.display,
+      href: profile.phone.href,
+      icon: icons.call,
+      ariaLabel: `Call me ${profile.phone.display}`,
+    });
+  list.push({
+    key: "email",
+    label: "Email me",
+    value: profile.email,
+    href: `mailto:${profile.email}`,
+    icon: icons.email,
+    ariaLabel: `Email me ${profile.email}`,
+  });
   if (profile.whatsapp)
     list.push({
       key: "whatsapp",
@@ -65,7 +100,7 @@ export function contactActions(): Action[] {
       href: profile.whatsapp,
       icon: icons.whatsapp,
       external: true,
-      srExtra: " (opens WhatsApp in a new tab)",
+      ariaLabel: `WhatsApp ${profile.phone?.display ?? "Chat"} (opens in a new tab)`,
     });
   return list;
 }
@@ -86,7 +121,7 @@ export function ContactActions({
       : "bg-surface text-ink shadow-[0_0_0_1px_rgb(29_29_31/0.08)] hover:shadow-[0_0_0_1px_rgb(29_29_31/0.2)]";
   return (
     <ul
-      className={`grid grid-cols-2 gap-2.5 max-[359px]:grid-cols-1 sm:flex sm:flex-wrap sm:gap-3 ${
+      className={`grid grid-cols-[repeat(auto-fit,minmax(min(100%,9rem),1fr))] gap-2.5 sm:flex sm:flex-wrap sm:gap-3 ${
         oneRowOnWide ? "xl:flex-nowrap xl:gap-2" : ""
       } ${className}`}
     >
@@ -96,6 +131,7 @@ export function ContactActions({
             href={a.href}
             {...(a.download ? { download: "" } : {})}
             {...(a.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            aria-label={a.ariaLabel}
             className={`group flex h-full min-h-[3.75rem] items-center gap-2 rounded-2xl px-2.5 py-2.5 transition-[background-color,box-shadow] min-[400px]:gap-2.5 min-[400px]:px-3 sm:gap-3 sm:px-3.5 ${
               a.primary ? "bg-accent text-white hover:bg-accent-hover" : secondary
             }`}
@@ -110,14 +146,15 @@ export function ContactActions({
             >
               {a.icon}
             </span>
-            <span className="min-w-0 leading-tight">
-              <span className="block text-[0.9375rem] font-semibold">{a.label}</span>
+            <span aria-hidden="true" className="min-w-0 leading-tight">
+              <span className="block whitespace-nowrap text-[0.9375rem] font-semibold">{a.label}</span>{" "}
               <span
                 className={`mt-0.5 block text-[0.8125rem] [overflow-wrap:break-word] ${a.primary ? "text-white" : "text-muted"}`}
               >
-                {a.key === "cv" ? <span className="sr-only">(</span> : null}
                 {a.key === "call" || a.key === "whatsapp" ? (
-                  <span className="whitespace-nowrap">{a.value}</span>
+                  // One line from 640px. On phones the number may break once, in the middle
+                  // ("+971 56 / 914 7945"), when a narrow column or enlarged text needs it.
+                  <span className="[overflow-wrap:normal] sm:whitespace-nowrap">{phoneGroups(a.value)}</span>
                 ) : a.key === "email" && a.value.includes("@") ? (
                   <>
                     {a.value.split("@")[0]}
@@ -126,9 +163,7 @@ export function ContactActions({
                 ) : (
                   a.value
                 )}
-                {a.key === "cv" ? <span className="sr-only">)</span> : null}
               </span>
-              {a.srExtra ? <span className="sr-only">{a.srExtra}</span> : null}
             </span>
           </a>
         </li>

@@ -8,7 +8,7 @@ import { pageMetadata } from "@/data/seo";
 import { BrandMark, Shot } from "@/components/media";
 import { Platforms, ProductLinks } from "@/components/ProjectCard";
 import { ButtonLink, OutboundLink } from "@/components/ui";
-import { profile } from "@/data/profile";
+import { experience, experienceId } from "@/data/experience";
 import { getProject, projects } from "@/data/projects";
 import type { CaseStudySection } from "@/data/types";
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/projects/[slug]">
     description: project.seo.description,
     path: `/projects/${project.slug}/`,
     type: "article",
-    image: { url: project.seo.ogImage, alt: `${project.name} case study by ${profile.name}` },
+    image: { url: project.seo.ogImage, alt: project.seo.ogAlt },
   });
 }
 
@@ -94,6 +94,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
   const caseStudies = projects.filter((p) => p.caseStudy);
   const idx = caseStudies.findIndex((p) => p.slug === project.slug);
   const next = caseStudies[(idx + 1) % caseStudies.length];
+  const job = experience.find((j) => j.projectSlugs?.includes(project.slug));
 
   return (
     <article>
@@ -143,7 +144,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
             {project.links.length ? (
               <div className="rise rise-delay-2 mt-7">
                 <h2 className="sr-only">Live product links</h2>
-                <ProductLinks links={project.links} />
+                <ProductLinks links={project.links} surface="page" />
                 {project.links.some((l) => !["website", "app-store", "google-play"].includes(l.kind)) ? (
                   <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm">
                     {project.links
@@ -214,6 +215,21 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
 
         <Block title="What I owned">
           <Bullets items={cs.responsibilities} />
+          {job ? (
+            <p className="mt-6 text-base">
+              <Link
+                href={`/#${experienceId(job.organisation)}`}
+                className="group inline-flex min-h-11 items-center gap-1.5 font-semibold text-accent"
+              >
+                <span className="link-underline">
+                  See my {job.role} role at {job.organisation}
+                </span>
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
+              </Link>
+            </p>
+          ) : null}
         </Block>
 
         <Block title="Implementation highlights">
