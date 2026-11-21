@@ -1,18 +1,16 @@
 @import "tailwindcss";
-@import "@fontsource-variable/fraunces";
-@import "@fontsource-variable/fraunces/wght-italic.css";
 @import "@fontsource-variable/inter";
 
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Palette: warm paper, ink, and a single accent. */
-  --color-paper: #f7f5f0;
-  --color-paper-deep: #efebe3;
+  /* Palette: warm white, near-black ink, and a single accent for actions. */
+  --color-paper: #faf8f4;
+  --color-paper-deep: #f2eee6;
   --color-ink: #16130f;
-  --color-muted: #59534a;
-  --color-line: #ddd7cc;
+  --color-muted: #57514a;
+  --color-line: #e2dcd1;
   --color-accent: #a83c0c;
   --color-accent-soft: #f3e2d6;
 }
@@ -48,8 +46,8 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    letter-spacing: -0.015em;
+    font-weight: 650;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
@@ -76,6 +74,41 @@
   }
   .link-underline:hover {
     text-decoration-color: currentColor;
+  }
+
+  /* Simple phone frame around a real screenshot. */
+  .shot-phone {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.6rem;
+    border: 1px solid var(--color-line);
+    background: white;
+    box-shadow:
+      0 1px 2px rgb(22 19 15 / 0.06),
+      0 18px 40px -22px rgb(22 19 15 / 0.35);
+  }
+
+  /* Simple browser frame around a desktop screenshot. */
+  .shot-desktop {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.9rem;
+    border: 1px solid var(--color-line);
+    background: white;
+    box-shadow:
+      0 1px 2px rgb(22 19 15 / 0.06),
+      0 18px 40px -22px rgb(22 19 15 / 0.35);
+  }
+  .shot-desktop::before {
+    content: "";
+    display: block;
+    height: 1.4rem;
+    border-bottom: 1px solid var(--color-line);
+    background:
+      radial-gradient(circle at 0.8rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
+      radial-gradient(circle at 1.45rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
+      radial-gradient(circle at 2.1rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
+      var(--color-paper);
   }
 
   .chip {

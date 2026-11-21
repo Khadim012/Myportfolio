@@ -32,6 +32,7 @@ const pages = [
 ];
 const viewports = {
   mobile: { width: 375, height: 812 },
+  phone390: { width: 390, height: 844 },
   tablet: { width: 768, height: 1024 },
   desktop: { width: 1440, height: 900 },
 };
@@ -57,6 +58,16 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     const res = await page.goto(BASE + path, { waitUntil: "networkidle" });
     const label = `[${vpName}] ${path}`;
     check(`${label} direct load 200`, res?.status() === 200, `status ${res?.status()}`);
+    // Scroll through the page so lazy-loaded images load before they are checked.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 500) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    });
+    await page.waitForLoadState("networkidle");
+    await page.waitForFunction(() => [...document.images].every((i) => i.naturalWidth > 0), null, { timeout: 10000 }).catch(() => {});
+    await page.evaluate(() => window.scrollTo(0, 0));
 
     const info = await page.evaluate(() => {
       const meta = (sel) => document.querySelector(sel)?.getAttribute("content") || null;
@@ -79,7 +90,9 @@ for (const [vpName, vp] of Object.entries(viewports)) {
         h1: document.querySelectorAll("h1").length,
         overflow: doc.scrollWidth - doc.clientWidth,
         wide,
-        brokenImages: [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).length,
+        // A broken or never-loaded image has no intrinsic width. (Lazy images that
+        // have loaded can still report complete=false once scrolled away.)
+        brokenImages: [...document.images].filter((i) => i.naturalWidth === 0).map((i) => i.getAttribute("src")),
         cvButtons: [...document.querySelectorAll("a")].filter((a) => /download cv/i.test(a.textContent || "")).length,
       };
     });
@@ -89,7 +102,7 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     check(`${label} og tags`, !!info.ogTitle && info.ogImage === "https://khadimhussain.com/og.png" && info.ogUrl === `https://khadimhussain.com${path}`, `${info.ogUrl} ${info.ogImage}`);
     check(`${label} one h1`, info.h1 === 1, String(info.h1));
     check(`${label} no horizontal overflow`, info.overflow <= 0, `${info.overflow}px ${info.wide.join(", ")}`);
-    check(`${label} images load`, info.brokenImages === 0);
+    check(`${label} images load`, info.brokenImages.length === 0, info.brokenImages.join(", "));
     if (path === "/") check(`${label} Download CV buttons shown`, info.cvButtons >= 1, String(info.cvButtons));
     check(`${label} no console errors`, errors.length === 0, errors.join(" | ").slice(0, 300));
     const file = `${SHOTS}/${vpName}-${path === "/" ? "home" : path.replaceAll("/", "_").replace(/^_|_$/g, "")}.png`;
@@ -113,7 +126,7 @@ for (const [vpName, vp] of Object.entries(viewports)) {
       as.map((a) => ({ href: a.getAttribute("href"), abs: a.href, target: a.target, rel: a.rel, text: a.textContent?.trim() })),
     );
     for (const l of links) {
-      if (l.href.startsWith("mailto:")) continue;
+      if (l.href.startsWith("mailto:") || l.href.startsWith("tel:")) continue;
       if (l.href.startsWith("/") || l.href.startsWith("#")) internal.add(l.abs.split("#")[0]);
       else external.set(l.abs, l);
     }
@@ -143,8 +156,10 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   const page = await ctx.newPage();
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
   await page.getByRole("link", { name: "View projects" }).click();
+  await page.waitForURL("**/#work");
+  check("nav: View projects scrolls to Featured work", page.url() === BASE + "/#work", page.url());
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Projects" }).click();
   await page.waitForURL("**/projects/");
-  check("nav: View projects -> /projects/", page.url() === BASE + "/projects/", page.url());
   await page.getByRole("link", { name: "ZUSHH", exact: true }).click();
   await page.waitForURL("**/projects/zushh/");
   check("nav: project card -> case study", (await page.locator("h1").textContent()) === "ZUSHH");
@@ -282,6 +297,112 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
   const ld = await page.$$eval('script[type="application/ld+json"]', (s) => s.map((x) => JSON.parse(x.textContent)));
   check("Person structured data present", ld.some((d) => d["@type"] === "Person" && d.name === "Khadim Hussain"));
+  await ctx.close();
+}
+
+
+// 9) Recruiter essentials on the first screen: CV, email and (once configured) phone.
+{
+  for (const [vpName, vp] of Object.entries(viewports)) {
+    const ctx = await browser.newContext(ctxOpts(vp));
+    const page = await ctx.newPage();
+    await page.goto(BASE + "/", { waitUntil: "networkidle" });
+    const info = await page.evaluate(() => {
+      const inView = (el) => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && r.top >= 0 && r.bottom <= window.innerHeight + 1;
+      };
+      const hero = document.querySelector('section[aria-labelledby="hero-title"]');
+      const links = [...hero.querySelectorAll("a")];
+      const cv = links.find((a) => /download cv/i.test(a.textContent) && a.hasAttribute("download"));
+      const mail = links.find((a) => a.getAttribute("href") === "mailto:m.khadim012@gmail.com");
+      const tel = [...document.querySelectorAll('a[href^="tel:"]')];
+      const headerCv = [...document.querySelectorAll("header a[download]")].filter((a) => a.getBoundingClientRect().width > 0);
+      const name = document.querySelector("h1");
+      const tap = [cv, mail].filter(Boolean).every((a) => a.getBoundingClientRect().height >= 44);
+      // Contact actions must come before the product visuals in reading order.
+      const visual = hero.querySelector("figure");
+      const before = mail && visual ? !!(mail.compareDocumentPosition(visual) & Node.DOCUMENT_POSITION_FOLLOWING) : false;
+      return {
+        name: name?.textContent,
+        cvInView: !!cv && inView(cv),
+        mailInView: !!mail && inView(mail),
+        mailShowsAddress: !!mail && mail.textContent.includes("m.khadim012@gmail.com"),
+        tel: tel.map((a) => ({ href: a.getAttribute("href"), text: a.textContent })),
+        headerCv: headerCv.length,
+        tap,
+        before,
+      };
+    });
+    const label = `[${vpName}] first screen`;
+    check(`${label} h1 is the name`, info.name === "Khadim Hussain", info.name);
+    check(`${label} Download CV visible without scrolling`, info.cvInView);
+    check(`${label} email visible without scrolling and shows the address`, info.mailInView && info.mailShowsAddress);
+    check(`${label} CV reachable from the header`, info.headerCv === 1, String(info.headerCv));
+    check(`${label} contact tap targets at least 44px`, info.tap);
+    check(`${label} contact actions come before product visuals`, info.before);
+    check(
+      `${label} call link only when a real number is configured`,
+      info.tel.every((t) => /^tel:\+\d{8,15}$/.test(t.href) && t.text.includes("+")),
+      info.tel.length ? JSON.stringify(info.tel) : "hidden (no number configured)",
+    );
+    await ctx.close();
+  }
+}
+
+// 10) Logos strip, image alt text and lazy loading.
+{
+  const ctx = await browser.newContext(ctxOpts(viewports.desktop));
+  const page = await ctx.newPage();
+  for (const path of pages) {
+    await page.goto(BASE + path, { waitUntil: "networkidle" });
+    const imgs = await page.$$eval("img", (els) =>
+      els.map((i) => ({ src: i.getAttribute("src"), alt: i.getAttribute("alt"), w: i.getAttribute("width"), h: i.getAttribute("height"), decorative: !!i.closest('[aria-hidden="true"]'), loading: i.getAttribute("loading"), top: i.getBoundingClientRect().top + window.scrollY })),
+    );
+    const missingAlt = imgs.filter((i) => i.alt === null || (!i.decorative && i.alt.trim().length < 8));
+    const noSize = imgs.filter((i) => !i.w || !i.h);
+    const eagerBelow = imgs.filter((i) => i.top > 1600 && i.loading !== "lazy");
+    check(`[images] ${path} meaningful alt text`, missingAlt.length === 0, missingAlt.map((i) => i.src).join(", "));
+    check(`[images] ${path} reserved dimensions`, noSize.length === 0, noSize.map((i) => i.src).join(", "));
+    check(`[images] ${path} below-the-fold images lazy-load`, eagerBelow.length === 0, eagerBelow.map((i) => i.src).join(", "));
+  }
+  await page.goto(BASE + "/", { waitUntil: "networkidle" });
+  const strip = await page.$$eval('section[aria-labelledby="companies"] li', (lis) =>
+    lis.map((li) => ({ text: li.textContent, href: li.querySelector("a")?.getAttribute("href") || null })),
+  );
+  for (const [name, href] of [
+    ["Life Pharmacy", "/projects/life-pharmacy/"],
+    ["ZUSHH", "/projects/zushh/"],
+    ["Nordic Home Healthcare", "/projects/nordic-home-healthcare/"],
+    ["Newsreels", null],
+    ["Soloinsight", "/projects/cloudgate/"],
+  ]) {
+    const item = strip.find((s) => s.text.includes(name));
+    check(`[logos] ${name} shown${href ? " and linked to its case study" : ""}`, !!item && item.href === href, JSON.stringify(item));
+  }
+  await ctx.close();
+}
+
+// 11) Case-study gallery: enlarge with keyboard, step with arrows, close with Escape.
+{
+  const ctx = await browser.newContext(ctxOpts(viewports.desktop));
+  const page = await ctx.newPage();
+  await page.goto(BASE + "/projects/zushh/", { waitUntil: "networkidle" });
+  const first = page.getByRole("button", { name: "Enlarge screenshot" }).first();
+  await first.focus();
+  await page.keyboard.press("Enter");
+  const dialog = page.getByRole("dialog");
+  await dialog.waitFor();
+  check("[gallery] Enter opens the enlarged view", await dialog.isVisible());
+  const before = await dialog.locator("img").getAttribute("src");
+  await page.keyboard.press("ArrowRight");
+  const after = await dialog.locator("img").getAttribute("src");
+  check("[gallery] arrow key moves to the next screenshot", before !== after, `${before} -> ${after}`);
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(200);
+  const closed = !(await dialog.isVisible());
+  const refocused = await page.evaluate(() => document.activeElement?.textContent?.includes("Enlarge screenshot"));
+  check("[gallery] Escape closes and returns focus to the screenshot", closed && refocused);
   await ctx.close();
 }
 

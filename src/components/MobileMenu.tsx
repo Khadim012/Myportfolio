@@ -28,7 +28,7 @@ export function MobileMenu({ items, email }: Props) {
   const close = () => setOpen(false);
 
   return (
-    <div className="md:hidden">
+    <div>
       <button
         ref={buttonRef}
         type="button"
@@ -60,7 +60,7 @@ export function MobileMenu({ items, email }: Props) {
               <Link
                 href={item.href}
                 onClick={close}
-                className="block border-b border-line py-4 font-display text-2xl"
+                className="block border-b border-line py-4 text-xl font-semibold"
               >
                 {item.label}
               </Link>
@@ -70,9 +70,9 @@ export function MobileMenu({ items, email }: Props) {
             <a
               href={`mailto:${email}`}
               onClick={close}
-              className="inline-flex rounded-full bg-ink px-5 py-3 text-paper"
+              className="inline-flex min-h-12 items-center rounded-full border border-ink/25 bg-white px-5"
             >
-              Email me
+              Email {email}
             </a>
           </li>
         </ul>
