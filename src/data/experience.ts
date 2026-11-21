@@ -1,9 +1,13 @@
+import { logos } from "./logos";
 import type { ExperienceItem } from "./types";
 
 /** Work history, most recent first. Titles, dates and locations from the CV. */
 export const experience: ExperienceItem[] = [
   {
     organisation: "Nordic Home Healthcare",
+    kind: "Employer",
+    logo: logos.nordic,
+    clientProjects: [{ name: "ZUSHH", slug: "zushh", logo: logos.zushh }],
     role: "Senior Mobile & Full-Stack Developer",
     period: "Jul 2026 – Present",
     location: "Dubai, UAE",
@@ -18,6 +22,8 @@ export const experience: ExperienceItem[] = [
   },
   {
     organisation: "Life Pharmacy",
+    kind: "Employer",
+    logo: logos.lifePharmacy,
     role: "Senior iOS Developer",
     period: "Nov 2021 – Jun 2026",
     location: "Dubai, UAE",
@@ -33,6 +39,9 @@ export const experience: ExperienceItem[] = [
   },
   {
     organisation: "Newsreels",
+    kind: "Employer",
+    logo: logos.newsreels,
+    clientProjects: [{ name: "ZIRO Rider & ZIRO Captain", slug: "ziro" }],
     role: "iOS Team Lead / Senior iOS Developer",
     period: "Oct 2018 – Nov 2021",
     location: "Dubai, UAE",
@@ -47,6 +56,8 @@ export const experience: ExperienceItem[] = [
   },
   {
     organisation: "Soloinsight Inc.",
+    kind: "Employer",
+    logo: logos.soloinsight,
     role: "iOS Developer",
     period: "Sep 2016 – Oct 2018",
     location: "Lahore, Pakistan",
@@ -60,6 +71,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     organisation: "Brand Impact & Buggz",
+    kind: "Freelance",
     role: "Freelance iOS Developer (remote)",
     period: "Jun 2017 – Nov 2020",
     summary:

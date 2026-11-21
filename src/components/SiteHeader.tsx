@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { profile } from "@/data/profile";
+import { cv, profile } from "@/data/profile";
 import { MobileMenu } from "./MobileMenu";
 
 export const navItems = [
+  { href: "/#work", label: "Work" },
   { href: "/projects/", label: "Projects" },
   { href: "/#experience", label: "Experience" },
   { href: "/#skills", label: "Skills" },
@@ -15,14 +16,14 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-5 sm:px-8">
         <Link
           href="/"
-          className="group flex items-baseline gap-2 font-display text-lg font-semibold tracking-tight"
+          className="group flex min-h-10 items-center gap-2 whitespace-nowrap text-[1.0625rem] font-semibold tracking-tight"
         >
-          <span aria-hidden="true" className="inline-block h-2 w-2 translate-y-[-2px] rounded-full bg-accent" />
+          <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-accent" />
           {profile.name}
         </Link>
 
-        <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-7 text-[0.9375rem]">
+        <nav aria-label="Main" className="hidden lg:block">
+          <ul className="flex items-center gap-6 text-[0.9375rem]">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-muted transition-colors hover:text-ink">
@@ -33,15 +34,37 @@ export function SiteHeader() {
             <li>
               <a
                 href={`mailto:${profile.email}`}
-                className="rounded-full bg-ink px-4 py-2 text-paper transition-colors hover:bg-accent"
+                className="text-muted transition-colors hover:text-ink"
               >
-                Email me
+                Email
               </a>
             </li>
+            {cv.available ? (
+              <li>
+                <a
+                  href={cv.path}
+                  download
+                  className="inline-flex min-h-10 items-center rounded-full bg-accent px-4 font-medium text-white transition-colors hover:bg-ink"
+                >
+                  {cv.label}
+                </a>
+              </li>
+            ) : null}
           </ul>
         </nav>
 
-        <MobileMenu items={navItems} email={profile.email} />
+        <div className="flex items-center gap-2 lg:hidden">
+          {cv.available ? (
+            <a
+              href={cv.path}
+              download
+              className="inline-flex h-10 items-center rounded-full bg-accent px-4 text-sm font-medium text-white"
+            >
+              CV<span className="sr-only"> download (PDF)</span>
+            </a>
+          ) : null}
+          <MobileMenu items={navItems} email={profile.email} />
+        </div>
       </div>
     </header>
   );

@@ -27,7 +27,7 @@ export default function ProjectsPage() {
     <>
       <section className="mx-auto max-w-6xl px-5 pb-16 pt-16 sm:px-8 sm:pt-24">
         <p className="rise eyebrow mb-4">Projects</p>
-        <h1 className="rise rise-delay-1 max-w-4xl text-5xl font-normal leading-[1.02] sm:text-7xl">
+        <h1 className="rise rise-delay-1 max-w-4xl text-[2.75rem] leading-[1.02] sm:text-6xl">
           Apps and platforms I&apos;ve built and shipped.
         </h1>
         <p className="rise rise-delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-muted">
@@ -39,9 +39,9 @@ export default function ProjectsPage() {
       <section aria-labelledby="case-studies" className="border-t border-line bg-paper-deep/50">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
           <SectionHeading id="case-studies" eyebrow="In depth" title="Case studies" />
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p, i) => (
-              <ProjectCard key={p.slug} project={p} index={i} />
+          <div className="grid gap-6 md:grid-cols-2">
+            {projects.map((p) => (
+              <ProjectCard key={p.slug} project={p} />
             ))}
           </div>
         </div>
@@ -54,13 +54,13 @@ export default function ProjectsPage() {
             {otherProjectGroups.map((group) => (
               <div key={group.id} className="reveal grid gap-6 md:grid-cols-[minmax(0,16rem)_1fr] md:gap-10">
                 <div>
-                  <h3 className="text-2xl font-medium">{group.title}</h3>
+                  <h3 id={group.id} className="text-2xl">{group.title}</h3>
                   <p className="mt-1 text-muted">{group.intro}</p>
                 </div>
                 <ul className="divide-y divide-line border-y border-line">
                   {group.items.map((item) => (
                     <li key={item.name} className="grid gap-1 py-5 sm:grid-cols-[minmax(0,14rem)_1fr] sm:gap-6">
-                      <p className="font-display text-lg">{item.name}</p>
+                      <p className="text-lg font-semibold">{item.name}</p>
                       <div>
                         <p>{item.description}</p>
                         <p className="mt-1 text-sm text-muted">

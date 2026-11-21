@@ -1,4 +1,18 @@
-import type { Project, ProjectGroup } from "./types";
+import { logos } from "./logos";
+import type { Project, ProjectGroup, Screenshot } from "./types";
+
+const appStore = (id: string) => `App Store listing ${id}, official store image`;
+const playStore = (pkg: string) => `Google Play listing ${pkg}, official store image`;
+
+const phone = (src: string, height: number, alt: string, caption: string, source: string): Screenshot => ({
+  src,
+  alt,
+  width: 600,
+  height,
+  caption,
+  kind: "phone",
+  source,
+});
 
 /**
  * Case-study projects. Order here is the order on the projects index;
@@ -12,10 +26,19 @@ export const projects: Project[] = [
     slug: "life-pharmacy",
     name: "LIFE Pharmacy",
     client: "LIFE Pharmacy, UAE",
+    engagement: "Employer",
     sector: "Pharmacy & e-commerce",
     summary:
       "The official LIFE Pharmacy app for online shopping, prescription upload and reward vouchers across the UAE.",
     role: "Senior iOS Developer; owned iOS end to end",
+    contribution:
+      "I led iOS development of the official LIFE Pharmacy app and its full migration from UIKit to SwiftUI, shipping new customer features while keeping each release fast and stable.",
+    highlights: [
+      "Led the full UIKit-to-SwiftUI migration within the app's MVVM and VIPER modules.",
+      "Fixed performance bottlenecks and crashes with Instruments and Bugsnag.",
+      "Integrated OneSignal and NetCore push, Bugsnag crash reporting and Adjust attribution.",
+    ],
+    logo: logos.lifePharmacy,
     platforms: ["iOS"],
     tech: [
       "Swift",
@@ -44,6 +67,36 @@ export const projects: Project[] = [
         kind: "google-play",
         note: "Product link. My role was iOS.",
       },
+    ],
+    screenshots: [
+      phone(
+        "/images/life-pharmacy/features.webp",
+        1299,
+        "LIFE Pharmacy app artwork listing its services: Book a Doctor, Order Medicines, Upload Prescription, Click & Collect and Life Rental.",
+        "The app brings doctor booking, medicine orders, prescription upload, Click & Collect and equipment rental together.",
+        appStore("id1450835575"),
+      ),
+      phone(
+        "/images/life-pharmacy/prescription-upload.webp",
+        1299,
+        "LIFE Pharmacy prescription upload screen artwork with a scan frame around a prescription.",
+        "Prescription upload: photograph a prescription and the nearest branch delivers it.",
+        appStore("id1450835575"),
+      ),
+      phone(
+        "/images/life-pharmacy/click-and-collect.webp",
+        1299,
+        "LIFE Pharmacy Click & Collect artwork: order online and collect at a nearby branch.",
+        "Click & Collect: order in the app and pick up at a nearby LIFE branch.",
+        appStore("id1450835575"),
+      ),
+      phone(
+        "/images/life-pharmacy/medical-rental.webp",
+        1299,
+        "Life Rental screen in the LIFE Pharmacy app: a manual wheelchair selected with rental from and to dates.",
+        "Life Rental: choose medical equipment and set the rental dates.",
+        appStore("id1450835575"),
+      ),
     ],
     caseStudy: {
       product: [
@@ -95,10 +148,19 @@ export const projects: Project[] = [
     slug: "zushh",
     name: "ZUSHH",
     client: "ZUSHH, UAE",
+    engagement: "Client",
     sector: "Home & commercial services",
     summary:
       "A UAE platform for booking home and commercial services, from deep cleaning and AC work to annual maintenance contracts.",
     role: "Built and shipped the native iOS app; delivered Android, web and backend",
+    contribution:
+      "I built and shipped the native iOS app and delivered the Android app, website and backend. Customers browse a service, pick a saved address and book an on-demand or scheduled visit.",
+    highlights: [
+      "Native iOS app in SwiftUI with MVVM, live on the App Store.",
+      "Android app live on Google Play, plus the website and backend.",
+      "Booking flow: browse, add to cart, choose an address, book now or schedule.",
+    ],
+    logo: logos.zushh,
     platforms: ["iOS", "Android", "Web", "Backend"],
     tech: ["Swift", "SwiftUI", "MVVM", "Firebase", "Kotlin", "Next.js", "Node.js", "TypeScript", "AI coding agents"],
     featured: true,
@@ -113,6 +175,38 @@ export const projects: Project[] = [
         label: "Google Play",
         href: "https://play.google.com/store/apps/details?id=com.zush.app",
         kind: "google-play",
+      },
+    ],
+    screenshots: [
+      phone(
+        "/images/zushh/services.webp",
+        1066,
+        "ZUSHH Services screen with a search bar and home maintenance categories: AC Service, Handyman, Pest Control, Electrician, Plumber and AMC.",
+        "ZUSHH service catalogue: home maintenance and appliance repair categories.",
+        playStore("com.zush.app"),
+      ),
+      phone(
+        "/images/zushh/booking.webp",
+        1299,
+        "ZUSHH AC Service booking screen with service location, address details, property type and schedule fields.",
+        "ZUSHH scheduled booking and address selection: location, address, property type and schedule.",
+        appStore("id6758752792"),
+      ),
+      phone(
+        "/images/zushh/home.webp",
+        1299,
+        "ZUSHH home screen with the delivery address, a service search and commercial service categories.",
+        "ZUSHH home: address, service search and categories in one place.",
+        appStore("id6758752792"),
+      ),
+      {
+        src: "/images/zushh/website.webp",
+        alt: "zushh.com homepage showing residential and commercial service categories beside a living room renovation banner.",
+        width: 1440,
+        height: 900,
+        caption: "zushh.com on desktop: service categories and current offers.",
+        kind: "desktop",
+        source: "Live site https://zushh.com/, captured 21 Nov 2026",
       },
     ],
     caseStudy: {
@@ -176,10 +270,19 @@ export const projects: Project[] = [
     slug: "nordic-home-healthcare",
     name: "Nordic Home Healthcare",
     client: "Nordic Home Healthcare, UAE",
+    engagement: "Employer",
     sector: "Healthcare",
     summary:
       "An at-home healthcare platform in the UAE for nursing, elderly care, physiotherapy, lab tests and IV therapy.",
     role: "Senior Mobile & Full-Stack Developer; own the platform end to end",
+    contribution:
+      "I own the platform end to end: the native Android app I built and launched in Kotlin, the native iOS app, the website and the REST APIs behind them.",
+    highlights: [
+      "Built the Android app in Kotlin and took it through Google Play review to public release.",
+      "Develop the native iOS app alongside it.",
+      "Web front end and backend in Next.js, React, Node.js and TypeScript.",
+    ],
+    logo: logos.nordic,
     platforms: ["iOS", "Android", "Web", "Backend"],
     tech: ["Kotlin", "Swift", "Next.js", "React", "Node.js", "TypeScript", "REST APIs"],
     featured: true,
@@ -190,7 +293,46 @@ export const projects: Project[] = [
         href: "https://play.google.com/store/apps/details?id=com.nordichc.ae",
         kind: "google-play",
       },
-      // iOS: add an App Store or public TestFlight link here once verified.
+      // iOS: no public App Store listing found (checked 21 Nov 2026). Add one here once verified.
+    ],
+    screenshots: [
+      {
+        src: "/images/nordic-home-healthcare/website.webp",
+        alt: "nordichc.com homepage with the Immunity Boost IV hero and service navigation for elderly care, blood tests and IV therapy.",
+        width: 1440,
+        height: 900,
+        caption: "nordichc.com on desktop: home healthcare services with booking from the hero.",
+        kind: "desktop",
+        source: "Live site https://nordichc.com/, captured 21 Nov 2026 (cookies declined)",
+      },
+      phone(
+        "/images/nordic-home-healthcare/home.webp",
+        1066,
+        "Nordic HC UAE app home screen with service search, popular services and a Blood Test category card.",
+        "App home: popular services and care categories.",
+        playStore("com.nordichc.ae"),
+      ),
+      phone(
+        "/images/nordic-home-healthcare/blood-test.webp",
+        1066,
+        "Blood Test at Home screen listing Liver, Kidney, Cholesterol and Complete Blood Count panels with prices.",
+        "Blood tests at home: choose a panel, then talk to the team to book.",
+        playStore("com.nordichc.ae"),
+      ),
+      phone(
+        "/images/nordic-home-healthcare/iv-therapy.webp",
+        1066,
+        "IV Therapy at Home screen listing wellness and fitness drips with prices.",
+        "IV therapy at home: drip options grouped by goal.",
+        playStore("com.nordichc.ae"),
+      ),
+      phone(
+        "/images/nordic-home-healthcare/services.webp",
+        1066,
+        "Nordic HC UAE Services screen with Anti-Aging and Longevity, Blood Test and elderly care cards.",
+        "Services list: each card opens its own booking page.",
+        playStore("com.nordichc.ae"),
+      ),
     ],
     caseStudy: {
       product: [
@@ -241,6 +383,7 @@ export const projects: Project[] = [
     slug: "ziro",
     name: "ZIRO Rider & ZIRO Captain",
     client: "Ziro Ride LLC, through Newsreels",
+    engagement: "Client",
     sector: "Ride sharing",
     summary:
       "A two-sided ride-sharing platform: a passenger app for booking and tracking rides, and a driver app for the people behind the wheel.",
@@ -311,10 +454,12 @@ export const projects: Project[] = [
     slug: "cloudgate",
     name: "CloudGate by Soloinsight",
     client: "Soloinsight Inc.",
+    engagement: "Employer",
     sector: "Enterprise security",
     summary:
       "A suite of seven enterprise iOS apps for physical access control, visitor management and attendance.",
     role: "Built and maintained the iOS suite",
+    logo: logos.soloinsight,
     platforms: ["iOS"],
     tech: ["Swift", "BLE beacons", "QR codes", "Touch ID", "SQLite", "ID scanning"],
     links: [
