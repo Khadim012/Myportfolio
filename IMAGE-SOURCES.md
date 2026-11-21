@@ -11,9 +11,9 @@ Each screenshot entry in `src/data/projects.ts` also carries a `source` field.
 
 | File | What it shows | Source |
 | --- | --- | --- |
+| `public/images/life-pharmacy/home.webp` | iOS home screen: search, quick actions, offers | Khadim's own iPhone screenshot of the live app (IMG_0941), delivery address blurred |
+| `public/images/life-pharmacy/click-and-collect-app.webp` | Click & Collect sheet with pickup prices | Khadim's own iPhone screenshot of the live app (IMG_0943), delivery address blurred |
 | `public/images/life-pharmacy/features.webp` | Service hub: doctor booking, medicines, prescription upload, Click & Collect, rental | App Store listing id1450835575, screenshot 2 |
-| `public/images/life-pharmacy/prescription-upload.webp` | Prescription upload | App Store listing id1450835575, screenshot 4 |
-| `public/images/life-pharmacy/click-and-collect.webp` | Click & Collect | App Store listing id1450835575, screenshot 5 |
 | `public/images/life-pharmacy/medical-rental.webp` | Life Rental: equipment and rental dates | App Store listing id1450835575, screenshot 6 |
 | `public/images/zushh/services.webp` | Services catalogue | Google Play listing com.zush.app, screenshot 3 |
 | `public/images/zushh/booking.webp` | AC Service booking: location, address, property type, schedule | App Store listing id6758752792, "Service Booking" |
@@ -31,6 +31,22 @@ Deliberately not used:
   Pharmacy", delivery-time claims) that this site does not make.
 - ZUSHH "Profile" store image: it shows a real person's name and email address.
 
+## Video
+
+| File | What it shows | Source |
+| --- | --- | --- |
+| `public/videos/life-pharmacy-ios.mp4` (720×900, 30 s, H.264, no audio) and poster `public/images/life-pharmacy/showcase-poster.webp` | LIFE Pharmacy iOS app: home offers, categories, prescription upload, cart, checkout and payment options | Khadim's own screen recording of the live app (ScreenRecording_11-21-2026_06-54-03), edited into a framed showcase with title, captions and crossfades |
+
+Privacy edits in the video: the delivery address in the home header is blurred (first 7.8 s of source);
+the profile screen (name, email, phone, photo) and the cart and checkout moments that show the delivery
+address are cut. The 1080×1350 master and the build script live outside the repo.
+
+## Social preview images
+
+`public/og.png` and `public/og/*.png` (1200×630) are rendered by `npm run images` from the screenshots
+and logos listed here. `-320.webp` and `-480.webp` files beside each image are smaller copies made by
+`scripts/make-variants.mjs` for phones.
+
 ## Logos and marks
 
 | File | Source |
@@ -46,8 +62,8 @@ ZIRO has no official asset available (its store listings are archived), so the s
 
 ## Still wanted from Khadim
 
-- Your own LIFE Pharmacy iOS screenshots (home, product browsing, product details, loyalty).
-  The public store images are marketing artwork, not raw app screens.
+- More LIFE Pharmacy screenshots without the touch indicator (product details, loyalty), if you'd like
+  to replace the two App Store artwork images in the gallery.
 - Raw ZUSHH and Nordic screenshots from your devices or simulators, if you'd like cleaner,
   untilted shots than the store artwork.
 - ZIRO Rider / ZIRO Captain icons or screens, if you still have them.

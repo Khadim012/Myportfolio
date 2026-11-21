@@ -30,6 +30,17 @@ const pages = [
   "/projects/ziro/",
   "/projects/cloudgate/",
 ];
+// Exact titles and social images per indexable page (SEO brief, Nov 2026).
+const EXPECTED = {
+  "/": { title: "Khadim Hussain | Senior iOS Engineer in Dubai", og: "/og.png" },
+  "/projects/": { title: "iOS, Android & Web Projects | Khadim Hussain", og: "/og/projects.png" },
+  "/projects/life-pharmacy/": { title: "Life Pharmacy iOS & SwiftUI Case Study | Khadim Hussain", og: "/og/life-pharmacy.png" },
+  "/projects/zushh/": { title: "ZUSHH Mobile & Web Case Study | Khadim Hussain", og: "/og/zushh.png" },
+  "/projects/nordic-home-healthcare/": { title: "Nordic Home Healthcare Case Study | Khadim Hussain", og: "/og/nordic-home-healthcare.png" },
+  "/projects/ziro/": { title: "ZIRO Ride-Hailing iOS Case Study | Khadim Hussain", og: "/og/ziro.png" },
+  "/projects/cloudgate/": { title: "CloudGate Enterprise iOS Case Study | Khadim Hussain", og: "/og/cloudgate.png" },
+};
+
 const viewports = {
   mobile: { width: 375, height: 812 },
   phone390: { width: 390, height: 844 },
@@ -92,14 +103,25 @@ for (const [vpName, vp] of Object.entries(viewports)) {
         wide,
         // A broken or never-loaded image has no intrinsic width. (Lazy images that
         // have loaded can still report complete=false once scrolled away.)
-        brokenImages: [...document.images].filter((i) => i.naturalWidth === 0).map((i) => i.getAttribute("src")),
+        // Images hidden at this width (display:none) are never fetched, so skip them.
+        brokenImages: [...document.images]
+          .filter((i) => i.getClientRects().length > 0 && i.naturalWidth === 0)
+          .map((i) => i.getAttribute("src")),
+        twitterCard: meta('meta[name="twitter:card"]'),
+        twitterImage: meta('meta[name="twitter:image"]'),
+        ogImageW: meta('meta[property="og:image:width"]'),
+        ogImageH: meta('meta[property="og:image:height"]'),
+        robots: meta('meta[name="robots"]'),
         cvButtons: [...document.querySelectorAll("a")].filter((a) => /download cv/i.test(a.textContent || "")).length,
       };
     });
-    check(`${label} title`, !!info.title && info.title.includes("Khadim Hussain"), info.title);
-    check(`${label} meta description`, !!info.description && info.description.length > 50);
+    check(`${label} exact title`, info.title === EXPECTED[path].title, info.title);
+    check(`${label} meta description 70-160 chars`, !!info.description && info.description.length >= 70 && info.description.length <= 160, `${info.description?.length}`);
+    check(`${label} indexable`, !info.robots || !/noindex/i.test(info.robots), info.robots || "no robots meta");
+    check(`${label} twitter card`, info.twitterCard === "summary_large_image" && info.twitterImage === info.ogImage, `${info.twitterCard} ${info.twitterImage}`);
+    check(`${label} og image 1200x630`, info.ogImageW === "1200" && info.ogImageH === "630", `${info.ogImageW}x${info.ogImageH}`);
     check(`${label} canonical`, info.canonical === `https://khadimhussain.com${path}`, info.canonical || "missing");
-    check(`${label} og tags`, !!info.ogTitle && info.ogImage === "https://khadimhussain.com/og.png" && info.ogUrl === `https://khadimhussain.com${path}`, `${info.ogUrl} ${info.ogImage}`);
+    check(`${label} og tags`, info.ogTitle === EXPECTED[path].title && info.ogImage === `https://khadimhussain.com${EXPECTED[path].og}` && info.ogUrl === `https://khadimhussain.com${path}`, `${info.ogUrl} ${info.ogImage}`);
     check(`${label} one h1`, info.h1 === 1, String(info.h1));
     check(`${label} no horizontal overflow`, info.overflow <= 0, `${info.overflow}px ${info.wide.join(", ")}`);
     check(`${label} images load`, info.brokenImages.length === 0, info.brokenImages.join(", "));
@@ -162,12 +184,12 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   await page.waitForURL("**/projects/");
   await page.getByRole("link", { name: "ZUSHH", exact: true }).click();
   await page.waitForURL("**/projects/zushh/");
-  check("nav: project card -> case study", (await page.locator("h1").textContent()) === "ZUSHH");
+  check("nav: project card -> case study", (await page.locator("h1").textContent()).startsWith("ZUSHH"));
   await page.getByRole("link", { name: /Nordic Home Healthcare/ }).last().click();
   await page.waitForURL("**/projects/nordic-home-healthcare/");
   check("nav: next case study link", page.url().endsWith("/projects/nordic-home-healthcare/"), page.url());
   await page.reload({ waitUntil: "networkidle" });
-  check("nav: refresh on case study keeps page", (await page.locator("h1").textContent()) === "Nordic Home Healthcare");
+  check("nav: refresh on case study keeps page", (await page.locator("h1").textContent()).startsWith("Nordic Home Healthcare"));
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Contact" }).click();
   await page.waitForURL("**/#contact");
   await page.waitForTimeout(800);
@@ -296,7 +318,30 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   const page = await ctx.newPage();
   await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
   const ld = await page.$$eval('script[type="application/ld+json"]', (s) => s.map((x) => JSON.parse(x.textContent)));
-  check("Person structured data present", ld.some((d) => d["@type"] === "Person" && d.name === "Khadim Hussain"));
+  const pp = ld.find((d) => d["@type"] === "ProfilePage");
+  check("ProfilePage structured data with Person mainEntity", pp?.mainEntity?.["@type"] === "Person" && pp.mainEntity.name === "Khadim Hussain");
+  check(
+    "Person has job title, URL, portrait and verified sameAs",
+    pp?.mainEntity?.jobTitle === "Senior iOS Engineer" &&
+      pp.mainEntity.url === "https://khadimhussain.com/" &&
+      pp.mainEntity.image?.url?.startsWith("https://khadimhussain.com/") &&
+      JSON.stringify(pp.mainEntity.sameAs) === JSON.stringify(["https://www.linkedin.com/in/khadimhussainios/", "https://github.com/Khadim012"]),
+    JSON.stringify(pp?.mainEntity?.sameAs),
+  );
+  const portraitStatus = await page.evaluate(async (u) => (await fetch(u)).status, pp?.mainEntity?.image?.url?.replace("https://khadimhussain.com", BASE));
+  check("Person portrait URL serves", portraitStatus === 200, String(portraitStatus));
+  for (const slug of ["life-pharmacy", "zushh", "nordic-home-healthcare", "ziro", "cloudgate"]) {
+    await page.goto(`${BASE}/projects/${slug}/`, { waitUntil: "domcontentloaded" });
+    const cs = await page.$$eval('script[type="application/ld+json"]', (s) => s.map((x) => JSON.parse(x.textContent)));
+    const bl = cs.filter((d) => d["@type"] === "BreadcrumbList");
+    const items = bl[0]?.itemListElement || [];
+    const visible = await page.$$eval('nav[aria-label="Breadcrumb"] li', (lis) => lis.map((li) => li.textContent.replace("/", "").trim()));
+    check(
+      `BreadcrumbList on /projects/${slug}/ matches the visible trail`,
+      bl.length === 1 && items.length === 3 && items[2].item === `https://khadimhussain.com/projects/${slug}/` && items.map((i) => i.name).join("|") === visible.join("|"),
+      `${items.map((i) => i.name).join(" > ")} vs ${visible.join(" > ")}`,
+    );
+  }
   await ctx.close();
 }
 
@@ -404,6 +449,88 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   const refocused = await page.evaluate(() => document.activeElement?.textContent?.includes("Enlarge screenshot"));
   check("[gallery] Escape closes and returns focus to the screenshot", closed && refocused);
   await ctx.close();
+}
+
+
+// 12) Crawlability: robots.txt, sitemap.xml, 404, OG image URLs.
+{
+  const ctx = await browser.newContext(ctxOpts(viewports.desktop));
+  const page = await ctx.newPage();
+  await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+  const txt = await page.evaluate(async (b) => {
+    const r = await fetch(b + "/robots.txt");
+    return { s: r.status, t: await r.text() };
+  }, BASE);
+  check("robots.txt serves and allows crawling", txt.s === 200 && /User-Agent: \*\s+Allow: \//i.test(txt.t) && !/Disallow: \/\s*$/m.test(txt.t), txt.t.replace(/\n/g, " | "));
+  check("robots.txt references the full sitemap URL", txt.t.includes("Sitemap: https://khadimhussain.com/sitemap.xml"));
+  const sm = await page.evaluate(async (b) => {
+    const r = await fetch(b + "/sitemap.xml");
+    return { s: r.status, t: await r.text() };
+  }, BASE);
+  const locs = [...sm.t.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  check("sitemap.xml serves", sm.s === 200, String(sm.s));
+  check("sitemap lists exactly the indexable pages", JSON.stringify([...locs].sort()) === JSON.stringify(Object.keys(EXPECTED).map((p) => "https://khadimhussain.com" + p).sort()), locs.join(" "));
+  for (const loc of locs) {
+    const st = await page.evaluate(async (u) => (await fetch(u, { redirect: "manual" })).status, loc.replace("https://khadimhussain.com", BASE));
+    check(`sitemap URL returns 200: ${loc}`, st === 200, String(st));
+  }
+  for (const [p, e] of Object.entries(EXPECTED)) {
+    const st = await page.evaluate(async (u) => (await fetch(u)).status, BASE + e.og);
+    check(`social image serves for ${p}`, st === 200, `${e.og} ${st}`);
+  }
+  const res = await page.goto(BASE + "/no-such-page/", { waitUntil: "domcontentloaded" });
+  const robots404 = await page.locator('meta[name="robots"]').getAttribute("content");
+  check("unknown URL returns 404 with noindex", res.status() === 404 && /noindex/.test(robots404 || ""), `${res.status()} ${robots404}`);
+  await ctx.close();
+}
+
+// 13) Contact actions: phone, WhatsApp, email and CV targets.
+{
+  for (const [vpName, vp] of Object.entries({ mobile: viewports.mobile, desktop: viewports.desktop })) {
+    const ctx = await browser.newContext(ctxOpts(vp));
+    const page = await ctx.newPage();
+    await page.goto(BASE + "/", { waitUntil: "networkidle" });
+    const hero = page.locator('section[aria-labelledby="hero-title"]');
+    const call = hero.getByRole("link", { name: /Call me/ });
+    const wa = hero.getByRole("link", { name: /WhatsApp/ });
+    check(`[${vpName}] call link dials the full international number`, (await call.getAttribute("href")) === "tel:+971569147945" && (await call.textContent()).includes("+971 56 914 7945"));
+    check(`[${vpName}] WhatsApp opens a chat with the same number`, (await wa.getAttribute("href")) === "https://wa.me/971569147945" && (await wa.getAttribute("target")) === "_blank");
+    for (const l of [call, wa, hero.getByRole("link", { name: /Email me/ }), hero.getByRole("link", { name: /Download CV/ })]) {
+      const box = await l.boundingBox();
+      check(`[${vpName}] "${(await l.textContent()).trim().slice(0, 24)}" tap target ≥ 44px and on screen`, box && box.height >= 44 && box.y + box.height <= vp.height, JSON.stringify(box));
+    }
+    await ctx.close();
+  }
+}
+
+// 14) Showcase video: lazy, autoplays muted only when visible, pause works, honours reduced motion.
+{
+  for (const reduced of [false, true]) {
+    const ctx = await browser.newContext({ ...ctxOpts(viewports.mobile), reducedMotion: reduced ? "reduce" : "no-preference" });
+    const page = await ctx.newPage();
+    await page.goto(BASE + "/projects/life-pharmacy/", { waitUntil: "networkidle" });
+    const video = page.locator("video");
+    const before = await video.evaluate((v) => ({ preload: v.getAttribute("preload"), muted: v.muted, inline: v.playsInline, ready: v.readyState }));
+    if (!reduced) check("[video] starts unloaded (preload=none), muted and inline", before.preload === "none" && before.muted && before.inline && before.ready === 0, JSON.stringify(before));
+    await video.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1500);
+    const playing = await video.evaluate((v) => !v.paused && v.currentTime > 0);
+    if (reduced) {
+      check("[video] does not autoplay with reduced motion", !playing);
+    } else {
+      check("[video] plays once scrolled into view", playing);
+      const btn = page.getByRole("button", { name: /Pause app video/ });
+      await btn.click();
+      check("[video] Pause button pauses", await video.evaluate((v) => v.paused));
+      await page.getByRole("button", { name: /Play app video/ }).click();
+      await page.waitForTimeout(300);
+      check("[video] Play button resumes", await video.evaluate((v) => !v.paused));
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(600);
+      check("[video] pauses when scrolled out of view", await video.evaluate((v) => v.paused));
+    }
+    await ctx.close();
+  }
 }
 
 await browser.close();

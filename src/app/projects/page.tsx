@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/data/seo";
 import { ProjectCard } from "@/components/ProjectCard";
 import { OutboundLink, SectionHeading } from "@/components/ui";
-import { ogImage } from "@/data/profile";
 import { otherProjectGroups, projects } from "@/data/projects";
 
 const description =
-  "Case studies and project work by Khadim Hussain: native iOS and Android apps, web platforms and enterprise suites for pharmacy, healthcare, home services, ride sharing and access control.";
+  "Case studies from Khadim Hussain, an iOS developer in Dubai: native iOS and Android apps, websites and backends for pharmacy, healthcare and home services.";
 
-export const metadata: Metadata = {
-  title: "Projects",
+export const metadata: Metadata = pageMetadata({
+  title: "iOS, Android & Web Projects | Khadim Hussain",
   description,
-  alternates: { canonical: "/projects/" },
-  openGraph: {
-    type: "website",
-    url: "/projects/",
-    siteName: "Khadim Hussain",
-    title: "Projects — Khadim Hussain",
-    description,
-    images: [ogImage],
-  },
-  twitter: { card: "summary_large_image", title: "Projects — Khadim Hussain", description, images: [ogImage.url] },
-};
+  path: "/projects/",
+  image: { url: "/og/projects.png", alt: "Projects by Khadim Hussain: Life Pharmacy, ZUSHH and Nordic Home Healthcare app screens" },
+});
 
 export default function ProjectsPage() {
   return (
@@ -28,11 +20,11 @@ export default function ProjectsPage() {
       <section className="mx-auto max-w-6xl px-5 pb-16 pt-16 sm:px-8 sm:pt-24">
         <p className="rise eyebrow mb-4">Projects</p>
         <h1 className="rise rise-delay-1 max-w-4xl text-[2.75rem] leading-[1.02] sm:text-6xl">
-          Apps and platforms I&apos;ve built and shipped.
+          iOS, Android and web projects I&apos;ve shipped.
         </h1>
         <p className="rise rise-delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-muted">
-          Five in-depth case studies, followed by other iOS work for clients and agencies. Every case study covers what
-          the product does, my part in it, what I built, the technology, and the outcome.
+          Five in-depth case studies from my work as an iOS developer in Dubai, followed by earlier iOS work for clients
+          and agencies. Each one covers what the product does, my part in it, what I built, and the outcome.
         </p>
       </section>
 

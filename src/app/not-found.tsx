@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Page not found",
-  robots: { index: false },
+  title: { absolute: "Page not found | Khadim Hussain" },
+  // Next.js adds <meta name="robots" content="noindex"> to the 404 page itself.
 };
 
 export default function NotFound() {

@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Gallery } from "@/components/Gallery";
+import { BreadcrumbJsonLd } from "@/components/PersonJsonLd";
+import { ShowcaseVideo } from "@/components/ShowcaseVideo";
+import { pageMetadata } from "@/data/seo";
 import { BrandMark, Shot } from "@/components/media";
 import { Platforms, ProductLinks } from "@/components/ProjectCard";
 import { ButtonLink, OutboundLink } from "@/components/ui";
-import { ogImage, profile, siteUrl } from "@/data/profile";
+import { profile } from "@/data/profile";
 import { getProject, projects } from "@/data/projects";
 import type { CaseStudySection } from "@/data/types";
 
@@ -19,27 +22,13 @@ export async function generateMetadata({ params }: PageProps<"/projects/[slug]">
   const { slug } = await params;
   const project = getProject(slug);
   if (!project) return {};
-  const title = `${project.name} case study`;
-  const url = `/projects/${project.slug}/`;
-  return {
-    title,
-    description: project.summary,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "article",
-      url,
-      siteName: profile.name,
-      title: `${title} — ${profile.name}`,
-      description: project.summary,
-      images: [ogImage],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} — ${profile.name}`,
-      description: project.summary,
-      images: [ogImage.url],
-    },
-  };
+  return pageMetadata({
+    title: project.seo.title,
+    description: project.seo.description,
+    path: `/projects/${project.slug}/`,
+    type: "article",
+    image: { url: project.seo.ogImage, alt: `${project.name} case study by ${profile.name}` },
+  });
 }
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
@@ -106,23 +95,15 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
   const idx = caseStudies.findIndex((p) => p.slug === project.slug);
   const next = caseStudies[(idx + 1) % caseStudies.length];
 
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "Projects", item: `${siteUrl}/projects/` },
-      { "@type": "ListItem", position: 3, name: project.name, item: `${siteUrl}/projects/${project.slug}/` },
-    ],
-  };
-
   return (
     <article>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb).replace(/</g, "\\u003c") }}
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Projects", path: "/projects/" },
+          { name: project.name, path: `/projects/${project.slug}/` },
+        ]}
       />
-
       <header className="mx-auto max-w-6xl px-5 pb-14 pt-10 sm:px-8 sm:pt-14">
         <nav aria-label="Breadcrumb" className="rise mb-10 text-sm text-muted">
           <ol className="flex flex-wrap gap-2">
@@ -150,8 +131,14 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
               <BrandMark name={project.name} logo={project.logo} size="lg" />
               <p className="eyebrow">{project.sector} · Case study</p>
             </div>
-            <h1 className="rise rise-delay-1 mt-6 max-w-4xl text-[2.75rem] leading-[1.02] sm:text-6xl">{project.name}</h1>
-            <p className="rise rise-delay-2 mt-5 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
+            <h1 className="rise-text rise-delay-1 mt-6 max-w-4xl text-[2.25rem] leading-[1.05] sm:text-5xl">{project.seo.heading}</h1>
+            <p className="rise-text rise-delay-2 mt-5 max-w-2xl text-xl leading-relaxed text-muted">{project.summary}</p>
+            {project.contribution ? (
+              <p className="rise rise-delay-2 mt-4 max-w-2xl text-lg leading-relaxed">
+                <span className="font-semibold">What I did: </span>
+                {project.contribution}
+              </p>
+            ) : null}
 
             {project.links.length ? (
               <div className="rise rise-delay-2 mt-7">
@@ -236,6 +223,28 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
             ))}
           </div>
         </Block>
+
+        {project.video ? (
+          <section aria-labelledby="in-action" className="border-t border-line py-12">
+            <div className="grid items-center gap-8 md:grid-cols-[minmax(0,15rem)_1fr] md:gap-12">
+              <div>
+                <h2 id="in-action" className="text-2xl leading-tight">
+                  The app in action
+                </h2>
+                <p className="mt-3 text-muted">{project.video.caption}</p>
+              </div>
+              <figure className="mx-auto w-full max-w-sm md:mx-0">
+                <ShowcaseVideo
+                  src={project.video.src}
+                  poster={project.video.poster}
+                  width={project.video.width}
+                  height={project.video.height}
+                  label={project.video.caption}
+                />
+              </figure>
+            </div>
+          </section>
+        ) : null}
 
         {shots.length ? (
           <section aria-labelledby="screens" className="border-t border-line py-12">

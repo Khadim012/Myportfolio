@@ -67,6 +67,27 @@ export interface Project {
   /** Up to three key points for the homepage feature. */
   highlights?: string[];
   logo?: Logo;
+  /** Search and social metadata for the case study page. */
+  seo: {
+    /** Full <title>, e.g. "Life Pharmacy iOS & SwiftUI Case Study | Khadim Hussain". */
+    title: string;
+    /** Meta description, about 150-160 characters. */
+    description: string;
+    /** Case-study H1: what the product is and what I did. */
+    heading: string;
+    /** 1200x630 social preview built from real screenshots and logos. */
+    ogImage: string;
+  };
+  /** Short screen-recording showcase. Real app footage, private details removed. */
+  video?: {
+    src: string;
+    poster: string;
+    width: number;
+    height: number;
+    /** Describes what the video shows, for captions and the accessible label. */
+    caption: string;
+    source: string;
+  };
   sector: string;
   platforms: string[];
   tech: string[];

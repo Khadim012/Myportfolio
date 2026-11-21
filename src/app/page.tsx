@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ContactActions } from "@/components/ContactActions";
+import type { Metadata } from "next";
 import { PersonJsonLd } from "@/components/PersonJsonLd";
+import { pageMetadata } from "@/data/seo";
 import { FeaturedProject, ProjectCard } from "@/components/ProjectCard";
 import { BrandMark, Shot } from "@/components/media";
 import { SectionHeading } from "@/components/ui";
@@ -10,6 +12,13 @@ import { companies } from "@/data/logos";
 import { education, portrait, profile } from "@/data/profile";
 import { getProject } from "@/data/projects";
 import { skillGroups } from "@/data/skills";
+
+export const metadata: Metadata = pageMetadata({
+  title: profile.seoTitle,
+  description: profile.metaDescription,
+  path: "/",
+  type: "profile",
+});
 
 const facts = [
   { value: "10+ yrs", label: "Native iOS" },
@@ -30,10 +39,10 @@ export default function Home() {
 
       {/* Hero */}
       <section aria-labelledby="hero-title" className="relative overflow-hidden">
-        <div className="mx-auto max-w-6xl px-5 pb-14 pt-10 sm:px-8 sm:pt-16 lg:pb-20">
+        <div className="mx-auto max-w-6xl px-5 pb-14 pt-6 sm:px-8 sm:pt-16 lg:pb-20">
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
             <div className="min-w-0">
-              <div className="rise flex items-center gap-4">
+              <div className="rise flex items-center gap-3.5 sm:gap-4">
                 <Image
                   src={portrait.src}
                   width={portrait.width}
@@ -41,7 +50,7 @@ export default function Home() {
                   alt={portrait.alt}
                   priority
                   sizes="5rem"
-                  className="h-16 w-16 shrink-0 rounded-full border border-line bg-white object-cover object-top sm:h-20 sm:w-20"
+                  className="h-14 w-14 shrink-0 rounded-full border border-line bg-white object-cover object-top sm:h-20 sm:w-20"
                 />
                 <p className="flex flex-col gap-1 text-sm font-medium text-ink sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-2 sm:text-base">
                   <span>{profile.location}</span>
@@ -53,16 +62,16 @@ export default function Home() {
                 </p>
               </div>
 
-              <h1 id="hero-title" className="rise rise-delay-1 mt-7 text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-7xl">
+              <h1 id="hero-title" className="rise-text rise-delay-1 mt-4 text-[2.5rem] leading-[1.02] sm:mt-7 sm:text-6xl lg:text-7xl">
                 {profile.name}
               </h1>
-              <p className="rise rise-delay-1 mt-3 text-xl font-medium leading-snug text-ink/75 sm:text-2xl lg:text-[1.75rem]">
+              <p className="rise-text rise-delay-1 mt-2 text-lg font-medium leading-snug text-ink/75 sm:mt-3 sm:text-2xl lg:text-[1.75rem]">
                 {profile.headline.replace("Full-Stack", "Full\u2011Stack")}
               </p>
 
-              <p className="rise rise-delay-2 mt-6 max-w-xl text-lg leading-relaxed text-muted">{profile.intro}</p>
+              <p className="rise-text rise-delay-2 mt-3 max-w-xl text-base leading-[1.6] text-muted sm:mt-6 sm:text-lg sm:leading-relaxed">{profile.intro}</p>
 
-              <ContactActions className="rise rise-delay-3 mt-8" />
+              <ContactActions className="rise rise-delay-3 mt-5 sm:mt-8" />
 
               <p className="rise rise-delay-3 mt-6">
                 <a href="#work" className="group inline-flex min-h-10 items-center gap-2 font-medium text-ink hover:text-accent">
@@ -206,12 +215,19 @@ export default function Home() {
                       </ul>
                     ) : null}
                     {job.projectSlugs?.length ? (
-                      <p className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                      <p className="mt-3 flex flex-wrap gap-x-5 text-sm">
                         {job.projectSlugs.map((slug) => {
                           const p = getProject(slug);
                           return p ? (
-                            <Link key={slug} href={`/projects/${slug}/`} className="link-underline font-medium text-accent">
-                              {p.name} case study
+                            <Link
+                              key={slug}
+                              href={`/projects/${slug}/`}
+                              className="group inline-flex min-h-11 items-center gap-1 font-medium text-accent"
+                            >
+                              <span className="link-underline">Read the {p.name} case study</span>
+                              <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
+                                →
+                              </span>
                             </Link>
                           ) : null;
                         })}

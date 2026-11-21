@@ -2,45 +2,33 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { ogImage, profile, siteUrl } from "@/data/profile";
+import { profile, siteUrl } from "@/data/profile";
+import { pageMetadata } from "@/data/seo";
 
-const title = `${profile.name} — ${profile.headline}`;
+// Site-wide defaults. Canonical URL and robots are set per page (see src/data/seo.ts),
+// so pages without their own metadata, such as the 404 page, never inherit them.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { alternates, robots, ...siteDefaults } = pageMetadata({
+  title: profile.seoTitle,
+  description: profile.metaDescription,
+  path: "/",
+  type: "profile",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: title,
-    template: `%s — ${profile.name}`,
-  },
-  description: profile.metaDescription,
+  ...siteDefaults,
   applicationName: profile.name,
-  authors: [{ name: profile.name, url: siteUrl }],
+  authors: [{ name: profile.name, url: `${siteUrl}/` }],
   creator: profile.name,
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    url: "/",
-    siteName: profile.name,
-    title,
-    description: profile.metaDescription,
-    locale: "en_US",
-    images: [ogImage],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description: profile.metaDescription,
-    images: ["/og.png"],
-  },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
     apple: "/apple-touch-icon.png",
   },
-  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f5f0",
+  themeColor: "#faf8f4",
   width: "device-width",
   initialScale: 1,
 };

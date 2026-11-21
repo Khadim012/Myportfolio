@@ -22,7 +22,7 @@ Live at https://khadimhussain.com.
 | `npm run check` | Lint + typecheck + static build (run before every commit) |
 | `npm run preview` | Serve `out/` at http://localhost:4173 with production routing |
 | `npm run test:browser` | Chrome checks (mobile/tablet/desktop, keyboard, links, CV download). Needs `preview` running and Chrome (`CHROME_PATH`). |
-| `npm run images` | Regenerate `public/og.png` and icons from `scripts/og-template.html` |
+| `npm run images` | Write `-320`/`-480` WebP variants of every image, then render `public/og.png`, `public/og/<page>.png` (1200×630) and the apple-touch-icon |
 
 ## Where content lives (edit data, not pages)
 - `src/data/profile.ts`: name, headline, intro, contact, education, CV toggle (`cv.available`), `phone` (null hides every Call action)
@@ -40,8 +40,16 @@ Live at https://khadimhussain.com.
 - Keep these engagements unpublished until Khadim gives scope and links: Vendcom UK, Front Gate Home Buyers, Fragrance Hub, Linx Accounting, Rajouri Passenger Transport, Biko Dive Car Rental, Yotta Group, OnTime Group.
 - Screenshots: optimised WebP in `public/images/<project>/`, added to the project's `screenshots` array with alt, caption, kind and source. The first entry is the lead image. Record every new image or logo in `IMAGE-SOURCES.md`.
 - Only genuine product screens. No private customer data, internal dashboards, credentials or test accounts in screenshots.
-- Phone number: shown on the site only once Khadim confirms it in `profile.phone`. It must still never appear in the public CV PDF.
+- Phone and WhatsApp: +971 56 914 7945, confirmed by Khadim (21 Nov 2026), in `profile.phone` / `profile.whatsapp`. It must still never appear in the public CV PDF.
+- Screen recordings: blur or cut anything personal (addresses, profile screens, names, emails) before publishing.
 - Homepage order: hero and contact actions → Companies & projects → Featured work (Life Pharmacy, ZUSHH, Nordic) → Experience → Skills and education → Contact.
+
+## SEO
+- Positioning: "Khadim Hussain, Senior iOS Engineer in Dubai". Homepage title and description live in `profile.seoTitle` / `profile.metaDescription`.
+- Every indexable page uses `pageMetadata()` (`src/data/seo.ts`): exact title, description, absolute canonical with trailing slash, robots, Open Graph and Twitter card. Case-study copy lives in each project's `seo` field; add an OG image for any new case study in `scripts/make-images.mjs`.
+- Structured data: ProfilePage + Person on the homepage, BreadcrumbList on case studies (`src/components/PersonJsonLd.tsx`). `sameAs` lists only verified profiles (LinkedIn, GitHub Khadim012).
+- `sitemap.ts` lists only indexable 200 pages; `robots.ts` allows all and points to the sitemap. The 404 page is noindex with no canonical.
+- Images go through the custom loader `src/image-loader.ts`; run `npm run images` after adding any image so its variants exist.
 
 ## Quality bar
 Responsive, keyboard accessible (skip link, visible focus), accessible contrast, reduced motion respected, no horizontal overflow. Every page keeps its title, description, canonical URL and OG tags; sitemap and Person JSON-LD stay correct.

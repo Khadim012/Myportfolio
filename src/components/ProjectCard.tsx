@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ExternalLink, Project } from "@/data/types";
 import { BrandMark, Shot } from "./media";
+import { ShowcaseVideo } from "./ShowcaseVideo";
 
 const storeKinds = new Set(["website", "app-store", "google-play"]);
 
@@ -157,7 +158,23 @@ export function FeaturedProject({ project }: { project: Project }) {
             </Link>
           </div>
         </div>
-        {phones.length ? (
+        {project.video ? (
+          <div className="flex items-center justify-center gap-5 bg-paper-deep px-5 py-7 sm:px-9 sm:py-10">
+            <figure className="w-full max-w-[22rem]">
+              <ShowcaseVideo
+                src={project.video.src}
+                poster={project.video.poster}
+                width={project.video.width}
+                height={project.video.height}
+                label={project.video.caption}
+              />
+              <figcaption className="mt-3 text-center text-sm text-muted">Screen recording of the live iOS app</figcaption>
+            </figure>
+            {phones[1] ? (
+              <Shot shot={phones[1]} sizes="(min-width: 1024px) 11rem, 30vw" className="hidden w-[36%] max-w-44 self-end sm:block" />
+            ) : null}
+          </div>
+        ) : phones.length ? (
           <div className="grid grid-cols-3 items-start gap-3 bg-paper-deep px-5 pt-7 sm:gap-5 sm:px-9 sm:pt-10">
             {phones.map((s, i) => (
               <Shot
