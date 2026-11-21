@@ -24,6 +24,7 @@ const phone = (src: string, height: number, alt: string, caption: string, source
 export const projects: Project[] = [
   {
     slug: "life-pharmacy",
+    brand: { panel: "var(--color-life)", deep: "var(--color-life-deep)" },
     seo: {
       title: "Life Pharmacy iOS & SwiftUI Case Study | Khadim Hussain",
       description:
@@ -162,10 +163,11 @@ export const projects: Project[] = [
   },
   {
     slug: "zushh",
+    brand: { panel: "var(--color-zushh)", deep: "var(--color-zushh-deep)" },
     seo: {
       title: "ZUSHH Mobile & Web Case Study | Khadim Hussain",
       description:
-        "I built ZUSHH’s native iOS app and delivered its Android app, website and backend: browse a service, pick an address, book on demand or scheduled.",
+        "I built and shipped ZUSHH’s native iOS app and contributed to its Android, web and backend delivery: browse a service, pick an address, then book.",
       heading: "ZUSHH: native iOS, Android, web and backend for on-demand home services",
       ogImage: "/og/zushh.png",
     },
@@ -175,9 +177,9 @@ export const projects: Project[] = [
     sector: "Home & commercial services",
     summary:
       "A UAE platform for booking home and commercial services, from deep cleaning and AC work to annual maintenance contracts.",
-    role: "Built and shipped the native iOS app; delivered Android, web and backend",
+    role: "Built and shipped the native iOS app; contributed to Android, web and backend",
     contribution:
-      "I built and shipped the native iOS app and delivered the Android app, website and backend. Customers browse a service, pick a saved address and book an on-demand or scheduled visit.",
+      "I built and shipped the native iOS app and contributed to the Android, web and backend delivery. Customers browse a service, pick a saved address and book an on-demand or scheduled visit.",
     highlights: [
       "Native iOS app in SwiftUI with MVVM, live on the App Store.",
       "Android app live on Google Play, plus the website and backend.",
@@ -291,6 +293,7 @@ export const projects: Project[] = [
   },
   {
     slug: "nordic-home-healthcare",
+    brand: { panel: "var(--color-nordic)", deep: "var(--color-nordic-deep)" },
     seo: {
       title: "Nordic Home Healthcare Case Study | Khadim Hussain",
       description:

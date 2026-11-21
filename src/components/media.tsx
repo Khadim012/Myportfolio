@@ -36,6 +36,7 @@ const markSizes = {
   sm: "h-8 w-8 rounded-lg text-[0.7rem]",
   md: "h-11 w-11 rounded-xl text-sm",
   lg: "h-14 w-14 rounded-2xl text-base",
+  xl: "h-24 w-24 rounded-[1.5rem] text-2xl",
 } as const;
 
 /**

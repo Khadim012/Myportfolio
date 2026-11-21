@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ExternalLink, Project } from "@/data/types";
 import { BrandMark, Shot } from "./media";
-import { ShowcaseVideo } from "./ShowcaseVideo";
 
 const storeKinds = new Set(["website", "app-store", "google-play"]);
 
@@ -17,7 +16,7 @@ export function ProductLinks({ links, className = "" }: { links: ExternalLink[];
             href={l.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-line bg-white px-3.5 text-sm font-medium transition-colors hover:border-ink"
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-paper px-3.5 text-sm font-medium text-ink transition-colors hover:bg-paper-deep"
           >
             {l.label}
             {l.kind === "google-play" && l.note ? <span className="font-normal text-muted">· product link</span> : null}
@@ -34,7 +33,7 @@ export function Platforms({ platforms }: { platforms: string[] }) {
   return (
     <ul className="flex flex-wrap gap-1.5" aria-label="Platforms">
       {platforms.map((p) => (
-        <li key={p} className="rounded-full bg-paper-deep px-2.5 py-0.5 text-xs font-medium text-ink/80">
+        <li key={p} className="rounded-full bg-accent-soft px-2.5 py-1 text-[0.8125rem] font-semibold text-accent">
           {p}
         </li>
       ))}
@@ -42,150 +41,124 @@ export function Platforms({ platforms }: { platforms: string[] }) {
   );
 }
 
-/** Lead visual for a card: website with a phone screen over it, a pair of phones, or the mark alone. */
-function CardVisual({ project }: { project: Project }) {
+function CaseStudyLink({ project }: { project: Project }) {
+  return (
+    <Link
+      href={`/projects/${project.slug}/`}
+      className="group inline-flex min-h-11 items-center gap-1.5 self-start text-[1.0625rem] font-semibold text-accent"
+    >
+      <span className="link-underline">View Case Study</span>
+      <span className="sr-only">: {project.name}</span>
+      <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+        →
+      </span>
+    </Link>
+  );
+}
+
+/** Brand-coloured panel with the project's real screens: website + phone, or two phones. */
+function BrandPanel({ project, lead = false }: { project: Project; lead?: boolean }) {
   const shots = project.screenshots ?? [];
   const desktop = shots.find((s) => s.kind === "desktop");
   const phones = shots.filter((s) => s.kind === "phone");
-
-  if (desktop && phones[0]) {
+  if (!phones.length && !desktop) {
+    // No verified product screens (archived apps): lead with the mark on a neutral panel.
     return (
-      <div className="relative bg-paper-deep px-5 pb-6 pt-6 sm:px-7">
-        <Shot shot={desktop} sizes="(min-width: 1024px) 26rem, 88vw" className="mr-[22%]" />
+      <div className="flex aspect-[16/7] items-center justify-center bg-paper-deep">
+        <BrandMark name={project.name} logo={project.logo} size="xl" />
+      </div>
+    );
+  }
+  const bg = project.brand
+    ? { background: `linear-gradient(150deg, ${project.brand.panel}, ${project.brand.deep})` }
+    : { background: "var(--color-paper-deep)" };
+
+  if (desktop && phones[0] && !lead) {
+    return (
+      <div className="relative overflow-hidden px-5 pb-7 pt-7 sm:px-8" style={bg}>
+        <Shot shot={desktop} sizes="(min-width: 1024px) 30rem, 88vw" className="mr-[20%]" />
         <Shot
           shot={phones[0]}
-          sizes="(min-width: 1024px) 8rem, 30vw"
-          className="absolute bottom-4 right-5 w-[30%] max-w-40 sm:right-7"
+          sizes="(min-width: 1024px) 9rem, 30vw"
+          className="absolute bottom-5 right-5 w-[29%] max-w-40 sm:right-8"
         />
       </div>
     );
   }
-  if (phones.length) {
-    return (
-      <div className="flex items-start justify-center gap-4 bg-paper-deep px-6 pt-6">
-        {phones.slice(0, 2).map((s, i) => (
-          <Shot key={s.src} shot={s} sizes="(min-width: 1024px) 10rem, 40vw" className={`w-[42%] max-w-48 ${i ? "mt-8" : ""}`} />
-        ))}
-      </div>
-    );
-  }
-  // No verified product screens: the card leads with its mark and summary instead.
-  return null;
+  return (
+    <div
+      className={`flex items-start justify-center gap-4 overflow-hidden px-6 sm:gap-6 ${lead ? "h-full min-h-[22rem] pt-9 lg:pt-12" : "pt-8"}`}
+      style={bg}
+    >
+      {phones.slice(0, 2).map((s, i) => (
+        <Shot
+          key={s.src}
+          shot={s}
+          sizes={lead ? "(min-width: 1024px) 14rem, 42vw" : "(min-width: 1024px) 11rem, 40vw"}
+          className={`${lead ? "w-[44%] max-w-60" : "w-[42%] max-w-48"} ${i ? "mt-10" : ""} -mb-12`}
+        />
+      ))}
+    </div>
+  );
 }
 
-/**
- * Project card used on the homepage and the projects index. Not a stretched
- * link, so the store links inside stay separately focusable.
- */
-export function ProjectCard({ project, headingLevel = "h3" }: { project: Project; headingLevel?: "h2" | "h3" }) {
+function CardText({ project, lead = false, headingLevel = "h3" }: { project: Project; lead?: boolean; headingLevel?: "h2" | "h3" }) {
   const Heading = headingLevel;
   return (
-    <article className="reveal flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-white/70">
-      <CardVisual project={project} />
-      <div className="flex flex-1 flex-col gap-4 p-6 sm:p-7">
-        <div className="flex items-center gap-3">
-          <BrandMark name={project.name} logo={project.logo} />
-          <div className="min-w-0">
-            <Heading className="text-xl leading-tight sm:text-2xl">
-              <Link href={`/projects/${project.slug}/`} className="hover:text-accent">
-                {project.name}
-              </Link>
-            </Heading>
-            <p className="text-sm text-muted">{project.sector}</p>
-          </div>
-        </div>
-        <Platforms platforms={project.platforms} />
-        <p className="leading-relaxed text-ink/85">{project.contribution ?? project.summary}</p>
-        <div className="mt-auto flex flex-col gap-4 pt-2">
-          <ProductLinks links={project.links} />
-          <Link
-            href={`/projects/${project.slug}/`}
-            className="group inline-flex min-h-10 items-center gap-1.5 self-start font-medium text-accent"
-          >
-            <span className="link-underline">View case study</span>
-            <span className="sr-only">: {project.name}</span>
-            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
+    <div className={`flex flex-1 flex-col gap-4 ${lead ? "p-6 sm:p-9 lg:p-11" : "p-6 sm:p-8"}`}>
+      <div className="flex items-center gap-3.5">
+        <BrandMark name={project.name} logo={project.logo} size={lead ? "lg" : "md"} />
+        <div className="min-w-0">
+          <Heading className="t-project">
+            <Link href={`/projects/${project.slug}/`} className="hover:text-accent">
+              {project.name}
+            </Link>
+          </Heading>
+          <p className="text-[0.9375rem] text-muted">{project.sector}</p>
         </div>
       </div>
+      <Platforms platforms={project.platforms} />
+      <p className="t-body">
+        <span className="font-semibold">My role: </span>
+        {project.contribution ?? project.summary}
+      </p>
+      {lead && project.highlights?.length ? (
+        <ul className="space-y-2 text-[0.9875rem] text-muted">
+          {project.highlights.map((h) => (
+            <li key={h} className="flex gap-3">
+              <span aria-hidden="true" className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+              <span>{h}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <div className="mt-auto flex flex-col gap-3 pt-1">
+        <ProductLinks links={project.links} />
+        <CaseStudyLink project={project} />
+      </div>
+    </div>
+  );
+}
+
+/** Project card: real product image on a brand panel, then name, role, platforms and links. */
+export function ProjectCard({ project, headingLevel = "h3" }: { project: Project; headingLevel?: "h2" | "h3" }) {
+  return (
+    <article className="card lift reveal flex h-full flex-col overflow-hidden">
+      <BrandPanel project={project} />
+      <CardText project={project} headingLevel={headingLevel} />
     </article>
   );
 }
 
-/** Larger featured layout, used for the lead project on the homepage. */
+/** Lead project: text and a large brand panel side by side on desktop, stacked on phones. */
 export function FeaturedProject({ project }: { project: Project }) {
-  const phones = (project.screenshots ?? []).filter((s) => s.kind === "phone").slice(0, 3);
   return (
-    <article className="reveal overflow-hidden rounded-3xl border border-line bg-white/70">
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-        <div className="flex flex-col gap-5 p-6 sm:p-9 lg:p-10">
-          <div className="flex items-center gap-4">
-            <BrandMark name={project.name} logo={project.logo} size="lg" />
-            <div>
-              <h3 className="text-2xl leading-tight sm:text-3xl">
-                <Link href={`/projects/${project.slug}/`} className="hover:text-accent">
-                  {project.name}
-                </Link>
-              </h3>
-              <p className="text-sm text-muted">{project.sector}</p>
-            </div>
-          </div>
-          <Platforms platforms={project.platforms} />
-          <p className="text-lg leading-relaxed">{project.contribution ?? project.summary}</p>
-          {project.highlights?.length ? (
-            <ul className="space-y-2 text-ink/80">
-              {project.highlights.map((h) => (
-                <li key={h} className="flex gap-3">
-                  <span aria-hidden="true" className="mt-[0.7em] h-px w-3 shrink-0 bg-accent" />
-                  <span>{h}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          <div className="mt-auto flex flex-col gap-4 pt-2">
-            <ProductLinks links={project.links} />
-            <Link
-              href={`/projects/${project.slug}/`}
-              className="group inline-flex min-h-10 items-center gap-1.5 self-start font-medium text-accent"
-            >
-              <span className="link-underline">View case study</span>
-              <span className="sr-only">: {project.name}</span>
-              <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
-          </div>
+    <article className="card reveal overflow-hidden">
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+        <CardText project={project} lead />
+        <div className="order-first lg:order-none">
+          <BrandPanel project={project} lead />
         </div>
-        {project.video ? (
-          <div className="flex items-center justify-center gap-5 bg-paper-deep px-5 py-7 sm:px-9 sm:py-10">
-            <figure className="w-full max-w-[22rem]">
-              <ShowcaseVideo
-                src={project.video.src}
-                poster={project.video.poster}
-                width={project.video.width}
-                height={project.video.height}
-                label={project.video.caption}
-              />
-              <figcaption className="mt-3 text-center text-sm text-muted">Screen recording of the live iOS app</figcaption>
-            </figure>
-            {phones[1] ? (
-              <Shot shot={phones[1]} sizes="(min-width: 1024px) 11rem, 30vw" className="hidden w-[36%] max-w-44 self-end sm:block" />
-            ) : null}
-          </div>
-        ) : phones.length ? (
-          <div className="grid grid-cols-3 items-start gap-3 bg-paper-deep px-5 pt-7 sm:gap-5 sm:px-9 sm:pt-10">
-            {phones.map((s, i) => (
-              <Shot
-                key={s.src}
-                shot={s}
-                sizes="(min-width: 1024px) 11rem, 30vw"
-                className={i === 1 ? "translate-y-6" : ""}
-              />
-            ))}
-          </div>
-        ) : null}
       </div>
     </article>
   );

@@ -166,7 +166,7 @@ for (const [vpName, vp] of Object.entries(viewports)) {
 
   // Anchors used by the nav exist.
   await page.goto(BASE + "/", { waitUntil: "domcontentloaded" });
-  for (const id of ["work", "experience", "skills", "contact", "education"]) {
+  for (const id of ["projects", "ai-development", "experience", "skills", "contact", "education"]) {
     check(`anchor #${id} exists`, (await page.locator(`#${id}`).count()) === 1);
   }
   await ctx.close();
@@ -177,10 +177,27 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   const ctx = await browser.newContext(ctxOpts(viewports.desktop));
   const page = await ctx.newPage();
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
-  await page.getByRole("link", { name: "View projects" }).click();
-  await page.waitForURL("**/#work");
-  check("nav: View projects scrolls to Featured work", page.url() === BASE + "/#work", page.url());
-  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Projects" }).click();
+  await page.getByRole("link", { name: "View Projects" }).click();
+  await page.waitForURL("**/#projects");
+  await page.waitForTimeout(900);
+  check("nav: View Projects scrolls to the Projects section", page.url() === BASE + "/#projects", page.url());
+  // Section headings must clear the floating header after anchor scrolling.
+  for (const id of ["projects", "experience", "skills", "contact"]) {
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: id[0].toUpperCase() + id.slice(1), exact: true }).click();
+    await page.waitForURL(`**/#${id}`);
+    await page.waitForTimeout(900);
+    const pos = await page.evaluate((id) => {
+      const h = document.querySelector(`#${id} h2`).getBoundingClientRect();
+      const bar = document.querySelector("header .glass").getBoundingClientRect();
+      const pill = document.querySelector(`header nav a[href="/#${id}"]`);
+      return { headingTop: Math.round(h.top), barBottom: Math.round(bar.bottom), active: pill?.getAttribute("aria-current") };
+    }, id);
+    // Contact is the last section, so the page cannot scroll its heading higher; it just has to be on screen.
+    const maxTop = id === "contact" ? 900 - 120 : 200;
+    check(`nav: #${id} heading clears the floating header`, pos.headingTop >= pos.barBottom + 4 && pos.headingTop < maxTop, JSON.stringify(pos));
+    check(`nav: ${id} pill is active after scrolling there`, pos.active === "location", JSON.stringify(pos));
+  }
+  await page.getByRole("link", { name: "All projects" }).click();
   await page.waitForURL("**/projects/");
   await page.getByRole("link", { name: "ZUSHH", exact: true }).click();
   await page.waitForURL("**/projects/zushh/");
@@ -190,9 +207,14 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   check("nav: next case study link", page.url().endsWith("/projects/nordic-home-healthcare/"), page.url());
   await page.reload({ waitUntil: "networkidle" });
   check("nav: refresh on case study keeps page", (await page.locator("h1").textContent()).startsWith("Nordic Home Healthcare"));
+  check(
+    "nav: Projects pill is active on case studies",
+    (await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Projects" }).getAttribute("aria-current")) === "page",
+  );
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Contact" }).click();
   await page.waitForURL("**/#contact");
   await page.waitForTimeout(800);
+  check("nav: case-study nav leads back to the homepage section", page.url() === BASE + "/#contact", page.url());
   const contactVisible = await page.locator("#contact").evaluate((el) => {
     const r = el.getBoundingClientRect();
     return r.top >= 0 && r.top < window.innerHeight;
@@ -211,19 +233,43 @@ for (const [vpName, vp] of Object.entries(viewports)) {
   const page = await ctx.newPage();
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
   const btn = page.getByRole("button", { name: "Menu" });
-  check("mobile: menu button visible", await btn.isVisible());
-  check("mobile: desktop nav hidden", !(await page.getByRole("navigation", { name: "Main" }).isVisible()));
+  check("mobile: labeled Menu button visible", await btn.isVisible());
+  const bb = await btn.boundingBox();
+  check("mobile: Menu button is at least 44 × 44", bb && bb.width >= 44 && bb.height >= 44, JSON.stringify(bb));
+  check("mobile: desktop nav hidden", !(await page.locator("header nav").first().isVisible()));
+  check("mobile: menu starts collapsed", (await btn.getAttribute("aria-expanded")) === "false");
   await btn.focus();
   await page.keyboard.press("Enter");
-  check("mobile: menu opens via keyboard", (await page.getByRole("button", { name: "Close" }).getAttribute("aria-expanded")) === "true");
+  const closeBtn = page.getByRole("button", { name: "Close" });
+  check("mobile: menu opens via keyboard (aria-expanded=true)", (await closeBtn.getAttribute("aria-expanded")) === "true");
+  const panelNav = page.getByRole("navigation", { name: "Main" }).last();
+  const rows = await panelNav.getByRole("link").evaluateAll((as) => as.map((a) => ({ t: a.textContent.trim(), h: a.getBoundingClientRect().height, w: a.getBoundingClientRect().width })));
+  check("mobile: panel rows Projects, Experience, Skills, Contact", ["Projects", "Experience", "Skills", "Contact"].every((l) => rows.some((r) => r.t.startsWith(l))), rows.map((r) => r.t).join(", "));
+  check("mobile: panel rows are full width and ≥ 44px tall", rows.every((r) => r.h >= 44 && r.w > 300), JSON.stringify(rows.map((r) => [r.h, Math.round(r.w)])));
   await page.keyboard.press("Escape");
-  check("mobile: Escape closes menu and restores focus",
-    (await page.getByRole("button", { name: "Menu" }).getAttribute("aria-expanded")) === "false" &&
-      (await page.evaluate(() => document.activeElement?.getAttribute("aria-controls") !== null)));
+  check(
+    "mobile: Escape closes the menu and returns focus to the button",
+    (await btn.getAttribute("aria-expanded")) === "false" && (await page.evaluate(() => document.activeElement?.textContent?.trim() === "Menu")),
+  );
+  await btn.click();
+  await page.mouse.click(200, 700);
+  check("mobile: tap outside closes the menu", (await btn.getAttribute("aria-expanded")) === "false");
+  await btn.click();
+  await page.getByRole("navigation", { name: "Main" }).last().getByRole("link", { name: /Experience/ }).click();
+  await page.waitForURL("**/#experience");
+  await page.waitForTimeout(1000);
+  const after = await page.evaluate(() => ({
+    expanded: document.querySelector("header button[aria-expanded]")?.getAttribute("aria-expanded"),
+    headingTop: Math.round(document.querySelector("#experience h2").getBoundingClientRect().top),
+    barBottom: Math.round(document.querySelector("header .glass").getBoundingClientRect().bottom),
+  }));
+  check("mobile: selecting a row closes the menu", after.expanded === "false", JSON.stringify(after));
+  check("mobile: section heading visible below the floating header", after.headingTop >= after.barBottom + 4, JSON.stringify(after));
+  await page.goto(BASE + "/projects/zushh/", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Menu" }).click();
-  await page.getByRole("navigation", { name: "Mobile" }).getByRole("link", { name: "Projects" }).click();
-  await page.waitForURL("**/projects/");
-  check("mobile: menu link navigates", page.url() === BASE + "/projects/");
+  await page.getByRole("navigation", { name: "Main" }).last().getByRole("link", { name: /Skills/ }).click();
+  await page.waitForURL("**/#skills");
+  check("mobile: case-study menu leads back to the homepage section", page.url() === BASE + "/#skills", page.url());
   await ctx.close();
 }
 
@@ -383,7 +429,24 @@ for (const [vpName, vp] of Object.entries(viewports)) {
     check(`${label} h1 is the name`, info.name === "Khadim Hussain", info.name);
     check(`${label} Download CV visible without scrolling`, info.cvInView);
     check(`${label} email visible without scrolling and shows the address`, info.mailInView && info.mailShowsAddress);
-    check(`${label} CV reachable from the header`, info.headerCv === 1, String(info.headerCv));
+    if (vp.width >= 1024) {
+      check(`${label} Download CV in the header`, info.headerCv === 1, String(info.headerCv));
+    } else {
+      // Compact mobile header holds name + Menu; the CV is the first row action in the menu panel.
+      await page.getByRole("button", { name: "Menu" }).click();
+      const menuCv = page.getByRole("navigation", { name: "Main" }).last().getByRole("link", { name: /Download CV/ });
+      check(`${label} Download CV in the menu panel`, (await menuCv.count()) === 1 && (await menuCv.isVisible()));
+      await page.keyboard.press("Escape");
+    }
+    const all4 = await page.evaluate(() =>
+      [...document.querySelectorAll('section[aria-labelledby="hero-title"] ul a')].map((a) => {
+        const r = a.getBoundingClientRect();
+        return r.top >= 0 && r.bottom <= window.innerHeight;
+      }),
+    );
+    if (vp.width >= 390 && vp.height >= 844) {
+      check(`${label} all four contact actions visible without scrolling`, all4.length === 4 && all4.every(Boolean), JSON.stringify(all4));
+    }
     check(`${label} contact tap targets at least 44px`, info.tap);
     check(`${label} contact actions come before product visuals`, info.before);
     check(

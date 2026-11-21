@@ -28,9 +28,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#faf8f4",
+  themeColor: "#f5f5f7",
   width: "device-width",
   initialScale: 1,
+  // Lets the floating header sit inside the notch / home-indicator safe areas.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

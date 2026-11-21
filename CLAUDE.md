@@ -6,7 +6,9 @@ Live at https://khadimhussain.com.
 ## Stack
 - Next.js 16 App Router, TypeScript, Tailwind CSS 4, **static export** (`output: "export"`, `trailingSlash: true`) to `out/`.
 - Read `AGENTS.md`: this Next.js version differs from older training data; check `node_modules/next/dist/docs/` before using an API.
-- Fonts are self-hosted via `@fontsource-variable` (Inter for everything). One accent colour for actions: `--color-accent` in `src/app/globals.css`.
+- Type: native system stack (`-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`); no web fonts on the site. Inter (devDependency) is used only to render social images.
+- Palette in `src/app/globals.css` `@theme`: page `#F5F5F7`, cards `#FFFFFF`, text `#1D1D1F` / `#515154`, actions blue `#0066CC`, borders `#D7D7DB`. Strong colour only inside project cards, from real branding (`--color-life`, `--color-zushh`, `--color-nordic`, sampled from the official icons). Fluid sizes: `t-hero`, `t-title`, `t-section`, `t-project`, `t-body`, `section-y`, `container-x` utilities.
+- Glass (`.glass`, `.glass-strong`) is for the navigation and its mobile menu only, with an opaque fallback without backdrop blur.
 
 ## Branches and deploys
 - `main` = live. Every push to `main` builds and deploys to GitHub Pages (`.github/workflows/pages.yml`) within about a minute.
@@ -42,7 +44,10 @@ Live at https://khadimhussain.com.
 - Only genuine product screens. No private customer data, internal dashboards, credentials or test accounts in screenshots.
 - Phone and WhatsApp: +971 56 914 7945, confirmed by Khadim (21 Nov 2026), in `profile.phone` / `profile.whatsapp`. It must still never appear in the public CV PDF.
 - Screen recordings: blur or cut anything personal (addresses, profile screens, names, emails) before publishing.
-- Homepage order: hero and contact actions → Companies & projects → Featured work (Life Pharmacy, ZUSHH, Nordic) → Experience → Skills and education → Contact.
+- Homepage order: Hero and contact actions → Companies & Projects → Projects (Life Pharmacy lead, ZUSHH, Nordic) → AI-Assisted Development → Experience → Skills and Education → Contact. Section ids: `projects`, `ai-development`, `experience`, `skills`, `contact`.
+- Navigation (`src/components/SiteHeader.tsx`): floating glass bar; links Projects, Experience, Skills, Contact as `/#id` so they work from case studies; active-section pill; mobile Menu panel closes on selection, outside tap or Escape (focus returns to the button).
+- Contact actions (`src/components/ContactActions.tsx`) read only from `profile.ts`, used by the hero and Contact section: 2 × 2 on phones, one row from 1280px in the hero.
+- The AI-Assisted Development image is an illustration with generic code (`npm run images` renders it). Replace it only with an approved real screenshot free of private code, credentials and customer data.
 
 ## SEO
 - Positioning: "Khadim Hussain, Senior iOS Engineer in Dubai". Homepage title and description live in `profile.seoTitle` / `profile.metaDescription`.

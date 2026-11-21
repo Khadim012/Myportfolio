@@ -18,7 +18,7 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/khadimhussainios/",
   studio: { name: "SwiftAppStudio", href: "https://swiftappstudio.com/" },
   intro:
-    "I'm a Senior iOS Engineer in Dubai, building native apps with Swift, SwiftUI, UIKit and Objective-C. I led iOS development and the UIKit-to-SwiftUI migration at Life Pharmacy, and delivered native iOS, Android, web and backend work for ZUSHH and Nordic Home Healthcare.",
+    "I'm a Dubai-based iOS engineer with over 10 years of experience building native apps with Swift, SwiftUI, UIKit, and Objective-C. I led iOS development at Life Pharmacy and delivered mobile and web platforms for ZUSHH and Nordic Home Healthcare.",
   pitch:
     "10+ years of native iOS and 15+ apps published on the App Store, from leading an iOS team to owning live apps end to end. Today I ship complete platforms: native iOS and Android, web and backend, using AI coding agents to move faster without cutting corners.",
   /** Homepage <title> and meta description. */
