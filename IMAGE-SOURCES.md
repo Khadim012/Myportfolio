@@ -41,6 +41,12 @@ Privacy edits in the video: the delivery address in the home header is blurred (
 the profile screen (name, email, phone, photo) and the cart and checkout moments that show the delivery
 address are cut. The 1080×1350 master and the build script live outside the repo.
 
+## Illustration
+
+| File | What it shows | Source |
+| --- | --- | --- |
+| `public/images/ai/workspace.webp` | Illustration of an AI-assisted iOS workflow: an editor with a generic SwiftUI example written for the image, an assistant pane, and the iOS Simulator showing the public Life Pharmacy home screen | Rendered by `scripts/make-images.mjs`; labelled "Illustration" on the image and in its caption. Not real project code. |
+
 ## Social preview images
 
 `public/og.png` and `public/og/*.png` (1200×630) are rendered by `npm run images` from the screenshots

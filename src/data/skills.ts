@@ -1,5 +1,6 @@
 import type { SkillGroup } from "./types";
 
+/** Four groups, native iOS first. Short lists so each group scans in a glance. */
 export const skillGroups: SkillGroup[] = [
   {
     title: "Native iOS",
@@ -8,59 +9,32 @@ export const skillGroups: SkillGroup[] = [
       "SwiftUI",
       "UIKit & Auto Layout",
       "Objective-C",
-      "Combine",
-      "Swift Concurrency",
-      "Core Data",
-      "StoreKit & subscriptions",
+      "Combine & Swift Concurrency",
+      "Core Data & SQLite",
+      "StoreKit, Apple Pay & Stripe",
       "MapKit & Core Location",
-      "Firebase",
-      "Offline storage with SQLite",
-      "BLE beacons",
-      "Touch ID",
-      "Apple Pay & Stripe",
-      "Socket.IO real-time",
-      "Google Maps SDK",
-      "Push via OneSignal",
+      "Push notifications",
     ],
   },
   {
-    title: "Architecture & quality",
+    title: "Android",
+    skills: ["Kotlin", "Native Android apps", "Google Play release & review", "Closed testing & production access"],
+  },
+  {
+    title: "Web & Backend",
+    skills: ["Next.js", "React", "Node.js", "TypeScript", "REST API design", "Socket.IO real-time"],
+  },
+  {
+    title: "Architecture & Tooling",
     skills: [
-      "MVVM",
-      "VIPER",
-      "Clean Architecture",
+      "MVVM, VIPER & Clean Architecture",
       "UIKit-to-SwiftUI migration",
       "XCTest unit & UI testing",
       "Instruments profiling",
       "Bugsnag & Crashlytics",
       "TestFlight & Fastlane",
-      "Code reviews",
-      "App Store release management",
-    ],
-  },
-  {
-    title: "Android & full stack",
-    skills: [
-      "Kotlin",
-      "Native Android",
-      "Google Play release & review",
-      "Next.js",
-      "React",
-      "Node.js",
-      "TypeScript",
-      "REST API design",
-    ],
-  },
-  {
-    title: "Product engineering",
-    skills: [
-      "AI-assisted development with Claude Code",
-      "Team leadership",
-      "Agile & sprint planning",
-      "Mentoring",
-      "Release coordination with product, design, backend & QA",
-      "Attribution with Adjust",
-      "Engagement with NetCore",
+      "Claude Code & AI-assisted workflows",
+      "Git, GitHub & JIRA",
     ],
   },
 ];

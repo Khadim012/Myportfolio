@@ -1,24 +1,73 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
 
 @theme {
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Native system sans-serif stack: SF Pro on Apple devices, Segoe UI on Windows. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  /* Palette: warm white, near-black ink, and a single accent for actions. */
-  --color-paper: #faf8f4;
-  --color-paper-deep: #f2eee6;
-  --color-ink: #16130f;
-  --color-muted: #57514a;
-  --color-line: #e2dcd1;
-  --color-accent: #a83c0c;
-  --color-accent-soft: #f3e2d6;
+  /* Light palette. Strong colour comes from the real product branding in project cards. */
+  --color-paper: #f5f5f7; /* page background */
+  --color-paper-deep: #ececf0; /* recessed panels */
+  --color-surface: #ffffff; /* cards and raised surfaces */
+  --color-ink: #1d1d1f; /* main text */
+  --color-muted: #515154; /* secondary text */
+  --color-line: #d7d7db; /* subtle borders */
+  --color-accent: #0066cc; /* primary action blue */
+  --color-accent-hover: #0058b0;
+  --color-accent-soft: #e8f1fb; /* soft blue surfaces */
+
+  /* Real product brand colours, used inside project cards. */
+  /* Sampled from the official app icons and app screens. "-deep" variants pass
+     WCAG AA with white text; the base colours are for image panels only. */
+  --color-life: #2f3e89;
+  --color-life-deep: #232f6b;
+  --color-zushh: #eb6a2d;
+  --color-zushh-deep: #a94615;
+  --color-nordic: #543d30;
+  --color-nordic-deep: #3f2d24;
+}
+
+/* Fluid type and spacing (360px → 1440px viewports). */
+@utility t-hero {
+  font-size: clamp(2.375rem, 1.55rem + 3.7vw, 4.75rem); /* 38–76px */
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+@utility t-title {
+  font-size: clamp(1.125rem, 0.98rem + 0.75vw, 1.75rem); /* 18–28px */
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+@utility t-section {
+  font-size: clamp(1.875rem, 1.45rem + 1.6vw, 3rem); /* 30–48px */
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+@utility t-project {
+  font-size: clamp(1.375rem, 1.2rem + 0.55vw, 1.875rem); /* 22–30px */
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+@utility t-body {
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.1875rem); /* 16–19px */
+  line-height: 1.55;
+}
+@utility section-y {
+  padding-block: clamp(3rem, 1.9rem + 4.4vw, 7rem); /* 48–112px */
+}
+@utility container-x {
+  width: 100%;
+  max-width: 75rem; /* 1200px */
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.6rem + 1.6vw, 2rem); /* 16–32px */
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5.5rem;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -26,20 +75,30 @@
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Anchor offsets: land each section heading about 6rem from the top, clear of the
+     floating header. Sections with top padding subtract it so the heading, not the
+     padding, sits at that line. */
+  section[id],
+  [id].scroll-target {
+    scroll-margin-top: 6rem;
+  }
+  section[id].section-y {
+    scroll-margin-top: calc(6rem - clamp(3rem, 1.9rem + 4.4vw, 7rem));
+  }
+
   ::selection {
     background: var(--color-accent);
-    color: var(--color-paper);
+    color: white;
   }
 
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   h1,
@@ -47,7 +106,7 @@
   h3 {
     font-family: var(--font-display);
     font-weight: 650;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
@@ -58,10 +117,9 @@
 
 @layer components {
   .eyebrow {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: var(--color-muted);
   }
 
@@ -76,16 +134,53 @@
     text-decoration-color: currentColor;
   }
 
+  /* iOS-style glass for the navigation and its mobile menu. */
+  .glass {
+    background: rgb(255 255 255 / 0.78);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.85),
+      0 0 0 1px rgb(29 29 31 / 0.06),
+      0 10px 30px -12px rgb(29 29 31 / 0.22);
+  }
+  /* The open menu sits over arbitrary content, so it gets a denser fill. */
+  .glass-strong {
+    background: rgb(255 255 255 / 0.9);
+  }
+  /* Opaque fallback where backdrop blur is unavailable, so text stays readable. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass {
+      background: rgb(255 255 255 / 0.97);
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background: rgb(255 255 255 / 0.98);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  .card {
+    background: var(--color-surface);
+    border-radius: 1.75rem;
+    box-shadow:
+      0 0 0 1px rgb(29 29 31 / 0.05),
+      0 2px 6px rgb(29 29 31 / 0.04);
+  }
+
   /* Simple phone frame around a real screenshot. */
   .shot-phone {
     position: relative;
     overflow: hidden;
     border-radius: 1.6rem;
-    border: 1px solid var(--color-line);
+    border: 1px solid rgb(29 29 31 / 0.1);
     background: white;
     box-shadow:
-      0 1px 2px rgb(22 19 15 / 0.06),
-      0 18px 40px -22px rgb(22 19 15 / 0.35);
+      0 1px 2px rgb(29 29 31 / 0.08),
+      0 22px 44px -22px rgb(29 29 31 / 0.45);
   }
 
   /* Simple browser frame around a desktop screenshot. */
@@ -93,11 +188,11 @@
     position: relative;
     overflow: hidden;
     border-radius: 0.9rem;
-    border: 1px solid var(--color-line);
+    border: 1px solid rgb(29 29 31 / 0.1);
     background: white;
     box-shadow:
-      0 1px 2px rgb(22 19 15 / 0.06),
-      0 18px 40px -22px rgb(22 19 15 / 0.35);
+      0 1px 2px rgb(29 29 31 / 0.08),
+      0 22px 44px -22px rgb(29 29 31 / 0.45);
   }
   .shot-desktop::before {
     content: "";
@@ -105,22 +200,22 @@
     height: 1.4rem;
     border-bottom: 1px solid var(--color-line);
     background:
-      radial-gradient(circle at 0.8rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
-      radial-gradient(circle at 1.45rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
-      radial-gradient(circle at 2.1rem 50%, #e0d9cd 0.22rem, transparent 0.24rem),
-      var(--color-paper);
+      radial-gradient(circle at 0.8rem 50%, #ff5f57 0.22rem, transparent 0.24rem),
+      radial-gradient(circle at 1.45rem 50%, #febc2e 0.22rem, transparent 0.24rem),
+      radial-gradient(circle at 2.1rem 50%, #28c840 0.22rem, transparent 0.24rem),
+      #f5f5f7;
   }
 
   .chip {
     display: inline-flex;
     align-items: center;
-    border: 1px solid var(--color-line);
     border-radius: 999px;
-    padding: 0.2rem 0.7rem;
-    font-size: 0.8125rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
     line-height: 1.4;
     color: var(--color-ink);
-    background: color-mix(in srgb, var(--color-paper) 60%, white);
+    background: var(--color-paper);
   }
 }
 
@@ -155,12 +250,17 @@
   .lift {
     transition:
       transform 220ms ease,
-      box-shadow 220ms ease,
-      border-color 220ms ease;
+      box-shadow 220ms ease;
   }
   .lift:hover {
     transform: translateY(-3px);
-    box-shadow: 0 14px 30px -18px rgb(22 19 15 / 0.35);
+    box-shadow:
+      0 0 0 1px rgb(29 29 31 / 0.05),
+      0 18px 36px -18px rgb(29 29 31 / 0.3);
+  }
+
+  .menu-panel {
+    animation: menu-in 180ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 }
 
@@ -202,6 +302,17 @@
   from {
     opacity: 0;
     transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
   }
   to {
     opacity: 1;

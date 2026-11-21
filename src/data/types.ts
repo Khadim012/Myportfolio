@@ -88,6 +88,13 @@ export interface Project {
     caption: string;
     source: string;
   };
+  /** Real product brand colours for the project card's image panel. */
+  brand?: {
+    /** Panel colour behind the screenshots. */
+    panel: string;
+    /** Darker shade for the gradient and any white text (passes WCAG AA). */
+    deep: string;
+  };
   sector: string;
   platforms: string[];
   tech: string[];
