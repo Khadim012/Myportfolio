@@ -30,7 +30,7 @@ Live at https://khadimhussain.com.
 - `src/data/profile.ts`: name, headline, intro, contact, education, CV toggle (`cv.available`), `phone` (null hides every Call action)
 - `src/data/logos.ts`: official marks and the "Companies & projects" strip
 - `src/data/projects.ts`: five case studies and the "More projects" groups
-- `src/data/experience.ts`: timeline (titles and dates from the CV)
+- `src/data/experience.ts`: timeline (titles and dates from the CV), most recent first with SwiftAppStudio kept at the end
 - `src/data/skills.ts`: skill groups
 - `src/data/credentials.ts`: UAE Certificate of Recognition (featured card, `featured: true`), degree, experience letters and award, each with a visible title, issuer and date; rendered by `src/components/Credentials.tsx` with a full-view dialog and "Open full size" link (documents in `public/images/credentials/`, up to 1600 px wide). Redact passport, nationality, registration/serial/document/verification numbers, QR codes and barcodes before adding a scan. Never publish the CV or cover letter images.
 - `public/khadim-hussain-cv.pdf`: public CV. **Must never contain the phone number.** Check with `pdftotext` before committing a new one.

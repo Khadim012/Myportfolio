@@ -6,7 +6,7 @@ import type { ExperienceItem } from "./types";
 export const experienceId = (organisation: string) =>
   `experience-${organisation.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
 
-/** Work history, most recent first. Titles, dates and locations from the CV. */
+/** Work history, most recent first, with my own studio (SwiftAppStudio) last. Titles, dates and locations from the CV. */
 export const experience: ExperienceItem[] = [
   {
     organisation: "Nordic Home Healthcare",
@@ -39,21 +39,6 @@ export const experience: ExperienceItem[] = [
     ],
     projectSlugs: ["zushh"],
     website: { label: "Visit zushh.com", href: "https://zushh.com/" },
-  },
-  {
-    organisation: profile.studio.name,
-    kind: "Founder",
-    role: "Founder & Lead Developer",
-    period: "2024 – Present",
-    location: "Dubai, UAE",
-    summary:
-      "I founded SwiftAppStudio, a Dubai studio that builds iOS and Android apps, websites and AI solutions for clients.",
-    highlights: [
-      "I build native iOS and Android apps, from the first design to App Store and Google Play release.",
-      "I build websites and backends with Next.js, React, Node.js and TypeScript.",
-      "I build AI features and automation, using AI coding agents to work with a lean team.",
-    ],
-    website: { label: "Visit SwiftAppStudio", href: profile.studio.href },
   },
   {
     organisation: "Life Pharmacy",
@@ -115,5 +100,20 @@ export const experience: ExperienceItem[] = [
       "For Brand Impact, I delivered five published apps: GiftyOnlineUAE, Pets Health, InfoSense Mobile, HomeBiz and Quote Catalog.",
       "For Buggz, I built World Cup 2018 Companion, People Finder and DoctorWho.",
     ],
+  },
+  {
+    organisation: profile.studio.name,
+    kind: "Founder",
+    role: "Founder & Lead Developer",
+    period: "2024 – Present",
+    location: "Dubai, UAE",
+    summary:
+      "I founded SwiftAppStudio, a Dubai studio that builds iOS and Android apps, websites and AI solutions for clients.",
+    highlights: [
+      "I build native iOS and Android apps, from the first design to App Store and Google Play release.",
+      "I build websites and backends with Next.js, React, Node.js and TypeScript.",
+      "I build AI features and automation, using AI coding agents to work with a lean team.",
+    ],
+    website: { label: "Visit SwiftAppStudio", href: profile.studio.href },
   },
 ];
