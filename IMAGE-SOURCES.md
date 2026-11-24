@@ -34,7 +34,7 @@ Deliberately not used:
 ## Certificates and credentials
 
 Khadim's own documents, supplied by him on 24 Nov 2026, shown in the homepage
-"Certificates & credentials" section (`src/data/credentials.ts`). Personal identifiers
+"Certificates & credentials" section (`src/data/credentials.ts`), exported up to 1600 px wide for the full view. Personal identifiers
 are covered with solid "Redacted" boxes before export; the originals are not in the repo.
 The CV and cover letter he supplied are not published (they contain his phone number).
 

@@ -7,7 +7,7 @@ import { FeaturedProject, ProjectCard } from "@/components/ProjectCard";
 import { BrandMark, Shot } from "@/components/media";
 import { experience, experienceId } from "@/data/experience";
 import { companies } from "@/data/logos";
-import { Gallery } from "@/components/Gallery";
+import { Credentials } from "@/components/Credentials";
 import { credentials } from "@/data/credentials";
 import { education, portrait, profile } from "@/data/profile";
 import { getProject } from "@/data/projects";
@@ -355,9 +355,9 @@ export default function Home() {
           <SectionHeading
             id="credentials-title"
             title="Certificates & credentials"
-            subtitle="My degree, its UAE recognition, experience letters from each employer and a Life Pharmacy award. Select any document to view it larger. Personal identifiers are redacted."
+            subtitle="My UAE Certificate of Recognition, degree, experience letters from each employer and a Life Pharmacy award. Tap any document to see it in full. Personal ID numbers are redacted."
           />
-          <Gallery shots={credentials} label="Certificate" itemName="document" />
+          <Credentials items={credentials} />
         </div>
       </section>
 
