@@ -126,7 +126,8 @@ export function ContactActions({
       } ${className}`}
     >
       {contactActions().map((a) => (
-        <li key={a.key} className="min-w-0">
+        // In the one-row hero, only the email shrinks (it breaks at "@"); the others keep their width.
+        <li key={a.key} className={`min-w-0 ${oneRowOnWide && a.key !== "email" ? "xl:shrink-0" : ""}`}>
           <a
             href={a.href}
             {...(a.download ? { download: "" } : {})}

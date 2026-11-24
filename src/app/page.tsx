@@ -372,7 +372,7 @@ export default function Home() {
               I build native iOS and Android apps, as well as the websites and backends that support them. I use AI
               coding assistants to speed up development, and I review and test the changes before they ship.
             </p>
-            <ContactActions surface="card" className="mt-6 sm:mt-8" />
+            <ContactActions surface="card" className="mt-6 max-[439px]:grid-cols-1 sm:mt-8" />
             <p className="mt-5 text-[0.9375rem] text-muted">
               {profile.availability}. Based in {profile.location}.
             </p>

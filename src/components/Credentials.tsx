@@ -62,7 +62,7 @@ export function Credentials({ items }: { items: Credential[] }) {
   return (
     <>
       {featured.map((c) => (
-        <article key={c.src} className="card mb-8 grid gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,20rem)_1fr] md:items-center md:gap-10">
+        <article key={c.src} className="mb-10 grid gap-6 rounded-[1.75rem] bg-paper p-5 sm:p-8 md:grid-cols-[minmax(0,20rem)_1fr] md:items-center md:gap-10">
           {viewButton(c, "(min-width: 768px) 20rem, 92vw")}
           <div>
             <p className="inline-flex rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-accent">Key credential</p>
