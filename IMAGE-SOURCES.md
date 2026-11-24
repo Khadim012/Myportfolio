@@ -31,6 +31,22 @@ Deliberately not used:
   Pharmacy", delivery-time claims) that this site does not make.
 - ZUSHH "Profile" store image: it shows a real person's name and email address.
 
+## Certificates and credentials
+
+Khadim's own documents, supplied by him on 24 Nov 2026, shown in the homepage
+"Certificates & credentials" section (`src/data/credentials.ts`), exported up to 1600 px wide for the full view. Personal identifiers
+are covered with solid "Redacted" boxes before export; the originals are not in the repo.
+The CV and cover letter he supplied are not published (they contain his phone number).
+
+| File | What it shows | Source and redactions |
+| --- | --- | --- |
+| `public/images/credentials/bs-computer-science-degree.webp` | University of Lahore BSCS degree, conferred 17 Jul 2018 | Degree.pdf scan; registration number and serial number redacted |
+| `public/images/credentials/uae-qualification-recognition.webp` | UAE MOHESR Academic Qualification Recognition Report, "Recognized" | Certificate_of_Recognition.pdf rendered at 200 dpi; document, verification and sequence numbers, QR code and barcode redacted |
+| `public/images/credentials/life-pharmacy-experience-letter.webp` | Life Pharmacy experience certificate, iOS Developer, 9 Nov 2021 – 19 Jun 2026 | Photo of the letter; nationality and passport number redacted |
+| `public/images/credentials/life-pharmacy-superstar-award.webp` | Life Pharmacy "Superstar" congratulations certificate, 8 Nov 2022 | Photo of the certificate; nothing redacted |
+| `public/images/credentials/newsreels-experience-certificate.webp` | Newsreels certificate of experience, iOS Team Lead, 1 Oct 2018 – 7 Nov 2021 | Scan; nothing redacted |
+| `public/images/credentials/soloinsight-experience-certificate.webp` | Solotech Labs / Soloinsight Inc. certificate of experience, iOS Developer, 5 Oct 2016 – 7 Sep 2018 | Scan; nothing redacted |
+
 ## Video
 
 | File | What it shows | Source |

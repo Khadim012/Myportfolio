@@ -6,8 +6,8 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[0.9375rem] font-medium transition-colors";
 
 const variants = {
-  primary: "bg-ink text-paper hover:bg-accent",
-  secondary: "border border-ink/80 text-ink hover:bg-ink hover:text-paper",
+  primary: "bg-accent text-white hover:bg-accent-hover",
+  secondary: "border border-line bg-surface text-ink hover:border-ink/40",
   ghost: "text-ink underline decoration-1 underline-offset-[0.3em] hover:text-accent px-1",
 } as const;
 

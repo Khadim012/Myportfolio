@@ -7,6 +7,8 @@ import { FeaturedProject, ProjectCard } from "@/components/ProjectCard";
 import { BrandMark, Shot } from "@/components/media";
 import { experience, experienceId } from "@/data/experience";
 import { companies } from "@/data/logos";
+import { Credentials } from "@/components/Credentials";
+import { credentials } from "@/data/credentials";
 import { education, portrait, profile } from "@/data/profile";
 import { getProject } from "@/data/projects";
 import { pageMetadata } from "@/data/seo";
@@ -347,8 +349,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Certificates and credentials */}
+      <section aria-labelledby="credentials-title" id="credentials" className="section-y bg-surface">
+        <div className="container-x">
+          <SectionHeading
+            id="credentials-title"
+            title="Certificates & credentials"
+            subtitle="My UAE Certificate of Recognition, degree, experience letters from each employer and a Life Pharmacy award. Tap any document to see it in full. Personal ID numbers are redacted."
+          />
+          <Credentials items={credentials} />
+        </div>
+      </section>
+
       {/* Contact */}
-      <section aria-labelledby="contact-title" id="contact" className="pb-[clamp(3rem,1.9rem+4.4vw,7rem)]">
+      <section aria-labelledby="contact-title" id="contact" className="section-y">
         <div className="container-x">
           <div className="card p-5 sm:p-10 lg:p-14">
             <h2 id="contact-title" className="t-section max-w-3xl">
@@ -358,7 +372,7 @@ export default function Home() {
               I build native iOS and Android apps, as well as the websites and backends that support them. I use AI
               coding assistants to speed up development, and I review and test the changes before they ship.
             </p>
-            <ContactActions surface="card" className="mt-6 sm:mt-8" />
+            <ContactActions surface="card" className="mt-6 max-[439px]:grid-cols-1 sm:mt-8" />
             <p className="mt-5 text-[0.9375rem] text-muted">
               {profile.availability}. Based in {profile.location}.
             </p>

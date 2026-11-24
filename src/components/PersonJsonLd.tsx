@@ -36,6 +36,12 @@ export function PersonJsonLd() {
       "@type": "CollegeOrUniversity",
       name: education.institution,
     },
+    // Current employer, as on the CV and the Experience section.
+    worksFor: {
+      "@type": "Organization",
+      name: "Nordic Home Healthcare",
+      url: "https://nordichc.com/",
+    },
     knowsAbout: [
       "iOS development",
       "Swift",
@@ -67,6 +73,46 @@ export function PersonJsonLd() {
         description: profile.metaDescription,
         inLanguage: "en",
         mainEntity: person,
+      }}
+    />
+  );
+}
+
+/**
+ * Case study: an Article authored by Khadim. The author points at the same Person
+ * (@id) as the homepage ProfilePage, so search engines connect every case study to him.
+ * No dates: the case studies carry none, and invented dates would be inaccurate.
+ */
+export function CaseStudyJsonLd({
+  slug,
+  headline,
+  description,
+  image,
+  about,
+}: {
+  slug: string;
+  headline: string;
+  description: string;
+  image: string;
+  about: string;
+}) {
+  const url = `${siteUrl}/projects/${slug}/`;
+  const author = { "@type": "Person", "@id": `${siteUrl}/#person`, name: profile.name, url: `${siteUrl}/` };
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${url}#article`,
+        headline,
+        description,
+        url,
+        mainEntityOfPage: url,
+        image: [`${siteUrl}${image}`],
+        inLanguage: "en",
+        author,
+        publisher: author,
+        about: { "@type": "Thing", name: about },
       }}
     />
   );

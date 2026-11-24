@@ -10,6 +10,7 @@ export const navItems = [
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
+  { id: "credentials", label: "Certificates" },
   { id: "contact", label: "Contact" },
 ] as const;
 
@@ -28,7 +29,7 @@ function useActiveSection(enabled: boolean) {
       const line = 120;
       let current: SectionId | null = null;
       for (const el of els) if (el.getBoundingClientRect().top <= line) current = el.id as SectionId;
-      // Skills and education share the page end with Contact: at the very bottom, Contact wins.
+      // Contact is short and sits at the page end: at the very bottom, Contact wins.
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = "contact";
       setActive(current);
     };
