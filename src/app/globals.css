@@ -186,6 +186,17 @@
   }
 
   /* Simple browser frame around a desktop screenshot. */
+  /* Marketing artwork (not a product screen): plain rounded frame, no browser chrome. */
+  .shot-artwork {
+    overflow: hidden;
+    border-radius: 0.9rem;
+    border: 1px solid rgb(29 29 31 / 0.1);
+    background: white;
+    box-shadow:
+      0 1px 2px rgb(29 29 31 / 0.08),
+      0 22px 44px -22px rgb(29 29 31 / 0.45);
+  }
+
   .shot-desktop {
     position: relative;
     overflow: hidden;

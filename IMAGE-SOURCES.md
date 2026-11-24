@@ -47,6 +47,12 @@ The CV and cover letter he supplied are not published (they contain his phone nu
 | `public/images/credentials/newsreels-experience-certificate.webp` | Newsreels certificate of experience, iOS Team Lead, 1 Oct 2018 – 7 Nov 2021 | Scan; nothing redacted |
 | `public/images/credentials/soloinsight-experience-certificate.webp` | Solotech Labs / Soloinsight Inc. certificate of experience, iOS Developer, 5 Oct 2016 – 7 Sep 2018 | Scan; nothing redacted |
 
+## ZIRO campaign artwork
+
+| File | What it shows | Source |
+| --- | --- | --- |
+| `public/images/ziro/tree-trips.webp` | ZIRO "Tree Trips" campaign artwork: "Take rides, we'll plant trees" | Marketing artwork (lock3.png) supplied by Khadim on 24 Nov 2026. App Store / Google Play badges, both QR codes and the store footnote removed (the store listings are not confirmed to load), headline re-centred, cropped to 1024×480. This is marketing art, not a product screen, and is labelled as such on the page. |
+
 ## Video
 
 | File | What it shows | Source |
@@ -77,10 +83,10 @@ and logos listed here. `-320.webp` and `-480.webp` files beside each image are s
 | `public/images/logos/zushh.webp` | ZUSHH app icon, App Store listing id6758752792 |
 | `public/images/logos/nordic-home-healthcare.webp` | Nordic HC UAE app icon, Google Play listing com.nordichc.ae (same mark as the nordichc.com header logo) |
 | `public/images/logos/newsreels.webp` | Newsreels company logo, https://www.linkedin.com/company/newsreels/ |
+| `public/images/logos/ziro.webp` | ZIRO app icon (ItunesArtwork@2x), supplied by Khadim on 24 Nov 2026 |
 | `public/images/logos/soloinsight.svg` | Emblem from the header logo SVG on https://www.soloinsight.com/, viewBox cropped to the circular mark |
 
 App icons were masked to the standard rounded square so every mark has the same footprint.
-ZIRO has no official asset available (its store listings are archived), so the site shows initials.
 
 ## Still wanted from Khadim
 
@@ -88,4 +94,4 @@ ZIRO has no official asset available (its store listings are archived), so the s
   to replace the two App Store artwork images in the gallery.
 - Raw ZUSHH and Nordic screenshots from your devices or simulators, if you'd like cleaner,
   untilted shots than the store artwork.
-- ZIRO Rider / ZIRO Captain icons or screens, if you still have them.
+- ZIRO Rider / ZIRO Captain app screens, if you still have them (the icon and campaign artwork are in).

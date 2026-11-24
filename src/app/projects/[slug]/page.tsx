@@ -189,7 +189,9 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
 
           {lead ? (
             <div className="rise rise-delay-2 relative mx-auto w-full max-w-md lg:max-w-none">
-              {lead.kind === "desktop" && leadPhone ? (
+              {lead.kind === "artwork" && !leadPhone ? (
+                <Shot shot={lead} sizes="(min-width: 1024px) 34rem, 92vw" priority />
+              ) : lead.kind === "desktop" && leadPhone ? (
                 <div className="relative pb-10">
                   <Shot shot={lead} sizes="(min-width: 1024px) 30rem, 92vw" priority className="mr-[18%]" />
                   <Shot
@@ -273,9 +275,13 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
         {shots.length ? (
           <section aria-labelledby="screens" className="border-t border-line py-12">
             <h2 id="screens" className="mb-2 text-2xl leading-tight">
-              Screens
+              {shots.every((x) => x.kind === "artwork") ? "Campaign artwork" : "Screens"}
             </h2>
-            <p className="mb-8 max-w-2xl text-muted">Select a screenshot to enlarge it. Images are from the live product and its public store listings.</p>
+            <p className="mb-8 max-w-2xl text-muted">
+              {shots.every((x) => x.kind === "artwork")
+                ? "Select the image to enlarge it. Campaign artwork from the product's own marketing."
+                : "Select a screenshot to enlarge it. Images are from the live product and its public store listings."}
+            </p>
             <Gallery shots={shots} label={project.name} />
           </section>
         ) : null}
