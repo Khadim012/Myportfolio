@@ -76,7 +76,7 @@ export const experience: ExperienceItem[] = [
     organisation: "Newsreels",
     kind: "Employer",
     logo: logos.newsreels,
-    clientProjects: [{ name: "ZIRO Rider & ZIRO Captain", slug: "ziro" }],
+    clientProjects: [{ name: "ZIRO Rider & ZIRO Captain", slug: "ziro", logo: logos.ziro }],
     role: "iOS Team Lead / Senior iOS Developer",
     period: "Oct 2018 – Nov 2021",
     location: "Dubai, UAE",

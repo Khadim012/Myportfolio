@@ -43,6 +43,7 @@ Live at https://khadimhussain.com.
 - Keep these engagements unpublished until Khadim gives scope and links: Vendcom UK, Front Gate Home Buyers, Fragrance Hub, Linx Accounting, Rajouri Passenger Transport, Biko Dive Car Rental, Yotta Group, OnTime Group.
 - Screenshots: optimised WebP in `public/images/<project>/`, added to the project's `screenshots` array with alt, caption, kind and source. The first entry is the lead image. Record every new image or logo in `IMAGE-SOURCES.md`.
 - Only genuine product screens. No private customer data, internal dashboards, credentials or test accounts in screenshots.
+- Marketing artwork Khadim supplies (e.g. ZIRO "Tree Trips") uses screenshot `kind: "artwork"`: a plain frame, never a phone or browser frame, and captioned as artwork. Remove store badges and QR codes for listings not confirmed to load.
 - Phone and WhatsApp: +971 56 914 7945, confirmed by Khadim (21 Nov 2026), in `profile.phone` / `profile.whatsapp`. It must still never appear in the public CV PDF.
 - Screen recordings: blur or cut anything personal (addresses, profile screens, names, emails) before publishing.
 - Homepage order: Hero and contact actions → Companies & Projects → Projects (Life Pharmacy lead, ZUSHH, Nordic) → AI-Assisted Development → Experience → Skills and Education → Certificates & credentials → Contact. Section ids: `projects`, `ai-development`, `experience`, `skills`, `credentials`, `contact`.

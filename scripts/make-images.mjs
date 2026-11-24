@@ -111,12 +111,12 @@ const cards = {
     </div>${deskPhone("images/nordic-home-healthcare/website.webp", "images/nordic-home-healthcare/home.webp")}</div>`),
 
   "og/ziro.png": page(`<div class="card"><div class="text">
-      <div class="brand">${mark(null, "ZR")}<div class="eyebrow">Case study</div></div>
+      <div class="brand">${mark("images/logos/ziro.webp")}<div class="eyebrow">Case study</div></div>
       <h1 class="small">ZIRO Rider &amp; ZIRO Captain</h1>
       <div class="role">Led the iOS team for two ride-hailing apps with live tracking and payments.</div>
       <div class="tags"><span class="tag">Swift</span><span class="tag">Socket.IO</span><span class="tag">Stripe</span><span class="tag">Apple Pay</span></div>
       <div class="site">Khadim Hussain · khadimhussain.com</div>
-    </div><div class="visual"><div class="mark initials big" style="font-size:96px">ZR</div></div></div>`),
+    </div><div class="visual"><img src="${img("images/ziro/tree-trips.webp")}" alt="" style="width:100%;border-radius:28px;box-shadow:0 24px 60px -24px rgba(29,29,31,.45)"></div></div>`),
 
   "og/cloudgate.png": page(`<div class="card"><div class="text">
       <div class="brand">${mark("images/logos/soloinsight.svg", "", true)}<div class="eyebrow">Case study</div></div>

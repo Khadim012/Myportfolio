@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Screenshot } from "@/data/types";
+import { frameClass } from "./media";
 
 /**
  * Captioned screenshot gallery. Each image is a button that opens a larger view
@@ -29,7 +30,8 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
 
   const current = index === null ? null : shots[index];
   const phones = shots.filter((s) => s.kind === "phone");
-  const desktops = shots.filter((s) => s.kind === "desktop");
+  // Wide images: browser screenshots and artwork.
+  const desktops = shots.filter((s) => s.kind !== "phone");
 
   const tile = (s: Screenshot) => {
     const i = shots.indexOf(s);
@@ -38,7 +40,7 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
         <button
           type="button"
           onClick={(e) => open(i, e.currentTarget)}
-          className={`${s.kind === "phone" ? "shot-phone" : "shot-desktop"} group block w-full cursor-zoom-in text-left focus-visible:outline-offset-4`}
+          className={`${frameClass(s.kind)} group block w-full cursor-zoom-in text-left focus-visible:outline-offset-4`}
         >
           <Image
             src={s.src}
@@ -49,7 +51,7 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
             sizes={s.kind === "phone" ? "(min-width: 1024px) 15rem, (min-width: 640px) 30vw, 45vw" : "(min-width: 1024px) 48rem, 92vw"}
             className="block h-auto w-full transition-transform duration-300 motion-safe:group-hover:scale-[1.015]"
           />
-          <span className="sr-only">Enlarge screenshot</span>
+          <span className="sr-only">Enlarge {s.kind === "artwork" ? "image" : "screenshot"}</span>
         </button>
         <figcaption className="mt-3 text-sm leading-snug text-muted">{s.caption}</figcaption>
       </figure>
@@ -116,18 +118,18 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
               alt={current.alt}
               width={current.width}
               height={current.height}
-              sizes={current.kind === "desktop" ? "94vw" : "(min-width: 640px) 26rem, 80vw"}
+              sizes={current.kind !== "phone" ? "94vw" : "(min-width: 640px) 26rem, 80vw"}
               // Fit the screen: as tall as the space left under the controls and caption
               // allows, never wider than the viewport, keeping the screenshot's ratio.
               style={
-                current.kind === "desktop"
+                current.kind !== "phone"
                   ? { width: "100%", height: "auto", maxHeight: "calc(94dvh - 8rem)", objectFit: "contain" }
                   : {
                       height: `min(calc(94dvh - 8rem), calc(94vw * ${(current.height / current.width).toFixed(3)}))`,
                       width: "auto",
                     }
               }
-              className={`shrink-0 rounded-2xl bg-white ${current.kind === "desktop" ? "" : "shadow-2xl"}`}
+              className={`shrink-0 rounded-2xl bg-white ${current.kind !== "phone" ? "" : "shadow-2xl"}`}
             />
             <figcaption className="max-w-2xl shrink-0 text-center text-sm leading-snug text-paper/85">{current.caption}</figcaption>
           </figure>

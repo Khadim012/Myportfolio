@@ -33,6 +33,13 @@ export const logos = {
     height: 256,
     source: "Newsreels company logo, linkedin.com/company/newsreels",
   },
+  ziro: {
+    src: "/images/logos/ziro.webp",
+    alt: "",
+    width: 256,
+    height: 256,
+    source: "ZIRO app icon (ItunesArtwork@2x), supplied by Khadim",
+  },
   soloinsight: {
     src: "/images/logos/soloinsight.svg",
     alt: "",

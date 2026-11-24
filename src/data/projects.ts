@@ -438,6 +438,18 @@ export const projects: Project[] = [
       "I led the iOS team that shipped ZIRO Rider and ZIRO Captain, and built rider features such as live driver search, trip scheduling, real-time tracking and Stripe and Apple Pay checkout.",
     platforms: ["iOS"],
     tech: ["Swift", "Socket.IO", "Stripe", "Apple Pay", "Maps & routing", "ARKit", "Core Bluetooth"],
+    logo: logos.ziro,
+    screenshots: [
+      {
+        src: "/images/ziro/tree-trips.webp",
+        alt: "ZIRO Tree Trips artwork: \"Take rides, we'll plant trees\" beside a white electric car",
+        width: 1024,
+        height: 480,
+        caption: "ZIRO's Tree Trips campaign artwork: \"Take rides, we'll plant trees.\"",
+        kind: "artwork",
+        source: "ZIRO marketing artwork (lock3.png), supplied by Khadim; store badges and QR codes removed",
+      },
+    ],
     links: [
       // Archived listings — add once each URL is confirmed to load.
       // { label: "ZIRO Rider", href: "https://ziro-rider.appstor.io/", kind: "archive", note: "Archived listing" },

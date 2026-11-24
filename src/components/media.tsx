@@ -5,6 +5,10 @@ import type { Logo, Screenshot } from "@/data/types";
  * A real product screenshot in a simple phone or browser frame.
  * Width and height are always set, so the space is reserved before the image loads.
  */
+/** Frame class for a screenshot: phone, browser window, or a plain frame for artwork. */
+export const frameClass = (kind: Screenshot["kind"]) =>
+  kind === "phone" ? "shot-phone" : kind === "desktop" ? "shot-desktop" : "shot-artwork";
+
 export function Shot({
   shot,
   sizes,
@@ -17,7 +21,7 @@ export function Shot({
   className?: string;
 }) {
   return (
-    <div className={`${shot.kind === "phone" ? "shot-phone" : "shot-desktop"} ${className}`}>
+    <div className={`${frameClass(shot.kind)} ${className}`}>
       <Image
         src={shot.src}
         alt={shot.alt}
