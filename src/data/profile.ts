@@ -19,6 +19,12 @@ export const profile = {
   studio: { name: "SwiftAppStudio", href: "https://swiftappstudio.com/" },
   intro:
     "I'm a Senior iOS Engineer in Dubai with more than 10 years of experience building native apps in Swift, SwiftUI, UIKit and Objective-C. I led iOS development at Life Pharmacy. Today I build native iOS and Android apps, websites and backends for Nordic Home Healthcare and ZUSHH, and I use AI-assisted workflows to ship them faster.",
+  /**
+   * Google Search Console "HTML tag" token (the content="..." value only), for a
+   * URL-prefix property. Null until Khadim provides one; a Domain property verified
+   * by DNS TXT record in Hostinger needs nothing here.
+   */
+  googleSiteVerification: null as string | null,
   /** Homepage <title> and meta description. */
   seoTitle: "Khadim Hussain | Senior iOS Engineer in Dubai",
   metaDescription:

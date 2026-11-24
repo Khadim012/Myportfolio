@@ -11,7 +11,8 @@
     "check": "npm run lint && npm run typecheck && npm run build",
     "preview": "node scripts/preview.mjs out",
     "images": "node scripts/make-images.mjs && node scripts/make-variants.mjs",
-    "test:browser": "node scripts/browser-test.mjs"
+    "test:browser": "node scripts/browser-test.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

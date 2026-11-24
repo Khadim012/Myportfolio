@@ -18,6 +18,7 @@ const { alternates, robots, ...siteDefaults } = pageMetadata({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   ...siteDefaults,
+  ...(profile.googleSiteVerification ? { verification: { google: profile.googleSiteVerification } } : {}),
   applicationName: profile.name,
   authors: [{ name: profile.name, url: `${siteUrl}/` }],
   creator: profile.name,

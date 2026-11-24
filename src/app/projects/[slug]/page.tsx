@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Gallery } from "@/components/Gallery";
-import { BreadcrumbJsonLd } from "@/components/PersonJsonLd";
+import { BreadcrumbJsonLd, CaseStudyJsonLd } from "@/components/PersonJsonLd";
 import { ShowcaseVideo } from "@/components/ShowcaseVideo";
 import { pageMetadata } from "@/data/seo";
 import { BrandMark, Shot } from "@/components/media";
@@ -93,11 +93,19 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
 
   const caseStudies = projects.filter((p) => p.caseStudy);
   const idx = caseStudies.findIndex((p) => p.slug === project.slug);
-  const next = caseStudies[(idx + 1) % caseStudies.length];
+  // Every other case study, starting after this one, for internal linking.
+  const others = [...caseStudies.slice(idx + 1), ...caseStudies.slice(0, idx)];
   const job = experience.find((j) => j.projectSlugs?.includes(project.slug));
 
   return (
     <article>
+      <CaseStudyJsonLd
+        slug={project.slug}
+        headline={project.seo.heading}
+        description={project.seo.description}
+        image={project.seo.ogImage}
+        about={project.name}
+      />
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
@@ -291,18 +299,33 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
 
       </div>
 
-      <nav aria-label="More case studies" className="mt-8 border-t border-line bg-paper-deep/50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-14 sm:px-8 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="eyebrow mb-3">Next case study</p>
-            <Link
-              href={`/projects/${next.slug}/`}
-              className="group text-3xl font-semibold leading-tight tracking-tight hover:text-accent sm:text-4xl"
-            >
-              {next.name} <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-1">→</span>
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-3">
+      <nav aria-labelledby="more-case-studies" className="mt-8 border-t border-line bg-surface">
+        <div className="container-x section-y">
+          <h2 id="more-case-studies" className="t-section">
+            More case studies
+          </h2>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+            {others.map((p) => (
+              <li key={p.slug}>
+                <Link
+                  href={`/projects/${p.slug}/`}
+                  className="group flex h-full items-start gap-4 rounded-[1.5rem] bg-paper p-5 transition-colors hover:bg-paper-deep sm:p-6"
+                >
+                  <BrandMark name={p.name} logo={p.logo} />
+                  <span className="min-w-0">
+                    <span className="block text-lg font-semibold leading-snug text-ink group-hover:text-accent">
+                      {p.name} case study
+                    </span>
+                    <span className="mt-1 block text-[0.9375rem] text-muted">{p.role}</span>
+                    <span className="mt-2 inline-flex items-center gap-1 text-[0.9375rem] font-semibold text-accent">
+                      Read the case study <span aria-hidden="true">→</span>
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/projects/" variant="secondary">
               All projects
             </ButtonLink>

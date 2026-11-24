@@ -53,7 +53,12 @@ Live at https://khadimhussain.com.
 ## SEO
 - Positioning: "Khadim Hussain, Senior iOS Engineer in Dubai". Homepage title and description live in `profile.seoTitle` / `profile.metaDescription`.
 - Every indexable page uses `pageMetadata()` (`src/data/seo.ts`): exact title, description, absolute canonical with trailing slash, robots, Open Graph and Twitter card. Case-study copy lives in each project's `seo` field; add an OG image for any new case study in `scripts/make-images.mjs`.
-- Structured data: ProfilePage + Person on the homepage, BreadcrumbList on case studies (`src/components/PersonJsonLd.tsx`). `sameAs` lists only verified profiles (LinkedIn, GitHub Khadim012).
+- Structured data (`src/components/PersonJsonLd.tsx`): ProfilePage + Person (with `worksFor` Nordic Home Healthcare) on the homepage; Article (author = the same Person `@id`, no invented dates) and BreadcrumbList on case studies. `sameAs` lists only verified profiles (LinkedIn, GitHub Khadim012).
+- Internal links: every case study ends with "More case studies" linking all the others.
+- `sitemap.ts` uses the last commit date as `<lastmod>`.
+- Search Console: set `profile.googleSiteVerification` only for a URL-prefix property's HTML-tag token; a Domain property is verified by a DNS TXT record in Hostinger instead.
+- IndexNow: key file `public/0a73a488af58d18f849adf8acbaac51b.txt`; after a deploy, `npm run indexnow` submits the live sitemap URLs to Bing and other IndexNow engines (not Google).
+- Status 24 Nov 2026: Google had not indexed the site (`site:khadimhussain.com` returned nothing); Search Console setup is the priority.
 - `sitemap.ts` lists only indexable 200 pages; `robots.ts` allows all and points to the sitemap. The 404 page is noindex with no canonical.
 - Images go through the custom loader `src/image-loader.ts`; run `npm run images` after adding any image so its variants exist.
 
