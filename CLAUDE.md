@@ -32,6 +32,7 @@ Live at https://khadimhussain.com.
 - `src/data/projects.ts`: five case studies and the "More projects" groups
 - `src/data/experience.ts`: timeline (titles and dates from the CV)
 - `src/data/skills.ts`: skill groups
+- `src/data/credentials.ts`: degree, UAE recognition, experience letters and award (documents in `public/images/credentials/`). Redact passport, nationality, registration/serial/document/verification numbers, QR codes and barcodes before adding a scan. Never publish the CV or cover letter images.
 - `public/khadim-hussain-cv.pdf`: public CV. **Must never contain the phone number.** Check with `pdftotext` before committing a new one.
 
 ## Content rules
@@ -44,7 +45,7 @@ Live at https://khadimhussain.com.
 - Only genuine product screens. No private customer data, internal dashboards, credentials or test accounts in screenshots.
 - Phone and WhatsApp: +971 56 914 7945, confirmed by Khadim (21 Nov 2026), in `profile.phone` / `profile.whatsapp`. It must still never appear in the public CV PDF.
 - Screen recordings: blur or cut anything personal (addresses, profile screens, names, emails) before publishing.
-- Homepage order: Hero and contact actions → Companies & Projects → Projects (Life Pharmacy lead, ZUSHH, Nordic) → AI-Assisted Development → Experience → Skills and Education → Contact. Section ids: `projects`, `ai-development`, `experience`, `skills`, `contact`.
+- Homepage order: Hero and contact actions → Companies & Projects → Projects (Life Pharmacy lead, ZUSHH, Nordic) → AI-Assisted Development → Experience → Skills and Education → Certificates & credentials → Contact. Section ids: `projects`, `ai-development`, `experience`, `skills`, `credentials`, `contact`.
 - Navigation (`src/components/SiteHeader.tsx`): floating glass bar; links Projects, Experience, Skills, Contact as `/#id` so they work from case studies; active-section pill; mobile Menu panel closes on selection, outside tap or Escape (focus returns to the button).
 - Contact actions (`src/components/ContactActions.tsx`) read only from `profile.ts`, used by the hero and Contact section: 2 × 2 on phones (one column on 320px screens or with enlarged text), one row from 1280px in the hero. Each action's `aria-label` is its visible label and value joined by one space (e.g. "Email me name@domain"), so the address reads as one unit and matches the visible text.
 - Experience entries have ids (`experienceId()` in `src/data/experience.ts`); each case study links to its matching role.

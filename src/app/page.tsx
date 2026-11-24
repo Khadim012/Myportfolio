@@ -7,6 +7,8 @@ import { FeaturedProject, ProjectCard } from "@/components/ProjectCard";
 import { BrandMark, Shot } from "@/components/media";
 import { experience, experienceId } from "@/data/experience";
 import { companies } from "@/data/logos";
+import { Gallery } from "@/components/Gallery";
+import { credentials } from "@/data/credentials";
 import { education, portrait, profile } from "@/data/profile";
 import { getProject } from "@/data/projects";
 import { pageMetadata } from "@/data/seo";
@@ -347,8 +349,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Certificates and credentials */}
+      <section aria-labelledby="credentials-title" id="credentials" className="section-y bg-surface">
+        <div className="container-x">
+          <SectionHeading
+            id="credentials-title"
+            title="Certificates & credentials"
+            subtitle="My degree, its UAE recognition, experience letters from each employer and a Life Pharmacy award. Select any document to view it larger. Personal identifiers are redacted."
+          />
+          <Gallery shots={credentials} label="Certificate" itemName="document" />
+        </div>
+      </section>
+
       {/* Contact */}
-      <section aria-labelledby="contact-title" id="contact" className="pb-[clamp(3rem,1.9rem+4.4vw,7rem)]">
+      <section aria-labelledby="contact-title" id="contact" className="section-y">
         <div className="container-x">
           <div className="card p-5 sm:p-10 lg:p-14">
             <h2 id="contact-title" className="t-section max-w-3xl">

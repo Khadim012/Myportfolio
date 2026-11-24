@@ -21,8 +21,8 @@ export interface Screenshot {
   height: number;
   /** Explains what the screen demonstrates. Shown under gallery images. */
   caption: string;
-  /** "phone" renders in a phone frame, "desktop" in a browser frame. */
-  kind: "phone" | "desktop";
+  /** "phone" renders in a phone frame, "desktop" in a browser frame, "document" as a paper scan. */
+  kind: "phone" | "desktop" | "document";
   /** Where the image came from. Every entry is also listed in IMAGE-SOURCES.md. */
   source: string;
 }

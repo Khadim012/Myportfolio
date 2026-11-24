@@ -9,7 +9,16 @@ import type { Screenshot } from "@/data/types";
  * in a native <dialog>: focus moves into it, Escape closes it, arrow keys step
  * through the set, and focus returns to the image that opened it.
  */
-export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }) {
+export function Gallery({
+  shots,
+  label,
+  itemName = "screenshot",
+}: {
+  shots: Screenshot[];
+  label: string;
+  /** What each item is, for screen readers ("screenshot", "document"). */
+  itemName?: string;
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const [index, setIndex] = useState<number | null>(null);
@@ -30,6 +39,13 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
   const current = index === null ? null : shots[index];
   const phones = shots.filter((s) => s.kind === "phone");
   const desktops = shots.filter((s) => s.kind === "desktop");
+  const documents = shots.filter((s) => s.kind === "document");
+  const frame = (s: Screenshot) =>
+    s.kind === "phone"
+      ? "shot-phone"
+      : s.kind === "desktop"
+        ? "shot-desktop"
+        : "overflow-hidden rounded-xl bg-white shadow-[0_0_0_1px_rgb(29_29_31/0.1),0_14px_30px_-18px_rgb(29_29_31/0.4)]";
 
   const tile = (s: Screenshot) => {
     const i = shots.indexOf(s);
@@ -38,7 +54,7 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
         <button
           type="button"
           onClick={(e) => open(i, e.currentTarget)}
-          className={`${s.kind === "phone" ? "shot-phone" : "shot-desktop"} group block w-full cursor-zoom-in text-left focus-visible:outline-offset-4`}
+          className={`${frame(s)} group block w-full cursor-zoom-in text-left focus-visible:outline-offset-4`}
         >
           <Image
             src={s.src}
@@ -46,10 +62,14 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
             width={s.width}
             height={s.height}
             loading="lazy"
-            sizes={s.kind === "phone" ? "(min-width: 1024px) 15rem, (min-width: 640px) 30vw, 45vw" : "(min-width: 1024px) 48rem, 92vw"}
+            sizes={
+              s.kind === "desktop"
+                ? "(min-width: 1024px) 48rem, 92vw"
+                : "(min-width: 1024px) 15rem, (min-width: 640px) 30vw, 45vw"
+            }
             className="block h-auto w-full transition-transform duration-300 motion-safe:group-hover:scale-[1.015]"
           />
-          <span className="sr-only">Enlarge screenshot</span>
+          <span className="sr-only">Enlarge {itemName}</span>
         </button>
         <figcaption className="mt-3 text-sm leading-snug text-muted">{s.caption}</figcaption>
       </figure>
@@ -59,13 +79,16 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
   return (
     <>
       {desktops.length ? <div className="mb-10 grid gap-8 lg:grid-cols-[minmax(0,48rem)]">{desktops.map(tile)}</div> : null}
+      {documents.length ? (
+        <div className="grid grid-cols-2 items-start gap-x-5 gap-y-8 sm:grid-cols-3">{documents.map(tile)}</div>
+      ) : null}
       {phones.length ? (
         <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">{phones.map(tile)}</div>
       ) : null}
 
       <dialog
         ref={dialogRef}
-        aria-label={`${label} screenshot`}
+        aria-label={`${label} ${itemName}`}
         onClose={() => {
           setIndex(null);
           openerRef.current?.focus();
@@ -116,7 +139,7 @@ export function Gallery({ shots, label }: { shots: Screenshot[]; label: string }
               alt={current.alt}
               width={current.width}
               height={current.height}
-              sizes={current.kind === "desktop" ? "94vw" : "(min-width: 640px) 26rem, 80vw"}
+              sizes={current.kind === "desktop" ? "94vw" : current.kind === "document" ? "(min-width: 640px) 44rem, 94vw" : "(min-width: 640px) 26rem, 80vw"}
               // Fit the screen: as tall as the space left under the controls and caption
               // allows, never wider than the viewport, keeping the screenshot's ratio.
               style={
