@@ -38,3 +38,17 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Tell Bing and other IndexNow engines the pages changed. Google does not use
+  # IndexNow. A failure here never affects the deploy.
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: sleep 60 # let the CDN serve the new key file and sitemap
+      - run: node scripts/indexnow.mjs
