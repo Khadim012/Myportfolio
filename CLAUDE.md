@@ -59,8 +59,9 @@ Live at https://khadimhussain.com.
 - Internal links: every case study ends with "More case studies" linking all the others.
 - `sitemap.ts` uses the last commit date as `<lastmod>`.
 - Search Console: set `profile.googleSiteVerification` only for a URL-prefix property's HTML-tag token; a Domain property is verified by a DNS TXT record in Hostinger instead.
-- IndexNow: key file `public/0a73a488af58d18f849adf8acbaac51b.txt`; after a deploy, `npm run indexnow` submits the live sitemap URLs to Bing and other IndexNow engines (not Google).
-- Status 24 Nov 2026: Google had not indexed the site (`site:khadimhussain.com` returned nothing); Search Console setup is the priority.
+- IndexNow: key file `public/0a73a488af58d18f849adf8acbaac51b.txt`; the `indexnow` job in `pages.yml` submits the live sitemap URLs to Bing and other IndexNow engines after every deploy (not Google); `npm run indexnow` does the same by hand. A failure there never blocks the deploy.
+- Status 26 Nov 2026: Search Console is verified (Domain property). Google crawled the homepage and the Life Pharmacy, ZUSHH and Nordic case studies on 24 Nov and lists them as "Crawled – currently not indexed" (normal for a new site with few links); one "Page with redirect" (http/www/no-slash variants are expected). Nothing technical blocks indexing.
+- Person JSON-LD carries `hasCredential` (degree, UAE MOHESR recognition) and `award`, matching `src/data/credentials.ts`; keep them in step.
 - `sitemap.ts` lists only indexable 200 pages; `robots.ts` allows all and points to the sitemap. The 404 page is noindex with no canonical.
 - Images go through the custom loader `src/image-loader.ts`; run `npm run images` after adding any image so its variants exist.
 

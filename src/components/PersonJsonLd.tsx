@@ -36,6 +36,27 @@ export function PersonJsonLd() {
       "@type": "CollegeOrUniversity",
       name: education.institution,
     },
+    // From the documents in the Certificates & credentials section (src/data/credentials.ts).
+    hasCredential: [
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "Bachelor of Science in Computer Science",
+        credentialCategory: "degree",
+        dateCreated: "2018-07-17",
+        recognizedBy: { "@type": "CollegeOrUniversity", name: education.institution },
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        name: "UAE Academic Qualification Recognition: Bachelor of Science in Computer Science",
+        credentialCategory: "qualification recognition",
+        dateCreated: "2026-09-07",
+        recognizedBy: {
+          "@type": "GovernmentOrganization",
+          name: "UAE Ministry of Higher Education and Scientific Research",
+        },
+      },
+    ],
+    award: "Life Pharmacy Superstar Award (2022)",
     // Current employer, as on the CV and the Experience section.
     worksFor: {
       "@type": "Organization",
